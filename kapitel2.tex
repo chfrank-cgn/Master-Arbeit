@@ -1,0 +1,96 @@
+%
+%	Begrifflichkeiten
+%
+
+\pagebreak
+\section{NIS2 Incident Handling \& Reporting}
+
+\onehalfspacing
+
+\subsection{The Network and Information Security Directive}
+
+The European Commission and the High Representative of the Union for Foreign Affairs and Security Policy presented a new EU Cybersecurity Strategy at the end of 2020, the second version of the Network and Information Security Directive (NIS2).\footnote{See \textit{EU (2023)}: Cybersecurity Policies. \cite{cyberPol}}
+
+We will first examine key components newly introduced by the directive and then compare them to an established industry framework.
+
+\subsubsection{EU Cybersecurity Agency ENISA}
+
+The European Union Agency for Cybersecurity (ENISA) is a key player in ensuring high Cybersecurity across Europe. Established in 2004 and empowered by the EU Cybersecurity Act, ENISA contributes to EU cyber policy, promotes trustworthy Information and Communications Technology products and services, collaborates with Member States and EU bodies, and prepares Europe for future cyber threats. By sharing knowledge, building capacity, and raising awareness, ENISA works with stakeholders to strengthen trust in the connected economy, boost resilience, and safeguard Europe's society and citizens in the digital age.\footnote{See \textit{EU (2025)}: Who we are. \cite{aboutEnisa}}
+
+\subsubsection{EU Cybersecurity Act}
+
+The EU Cybersecurity Act is the central legislation strengthening the EU's cybersecurity capabilities. It enhances the role of ENISA, the EU Agency for Cybersecurity, and establishes a robust certification framework for products and services.
+
+Key provisions of the EU Cybersecurity Act:
+
+\begin{itemize}
+    \item Strengthened ENISA: The Act grants ENISA a permanent mandate, increases its resources, and assigns it new responsibilities.
+    \item Certification framework: ENISA will play a pivotal role in establishing and maintaining a European cybersecurity certification framework.
+    \item Public information: ENISA will provide information on certification schemes and issued certificates through a dedicated website.
+    \item Operational cooperation: ENISA will facilitate cooperation between EU Member States in handling cybersecurity incidents and coordinating responses to large-scale cross-border attacks.\footnote{See \textit{EU (2023)}: The EU Cyber Security Act. \cite{cyberSec}}
+\end{itemize}
+
+\subsubsection{EU Cyber Resilience Act}
+
+The Cyber Resilience Act (CRA) is a significant step towards safeguarding consumers and businesses from cybersecurity vulnerabilities. By introducing mandatory cybersecurity requirements for manufacturers and retailers, the CRA addresses inadequate security features in products and software. It also aims to empower consumers and businesses by providing clear information on product cybersecurity and ensuring that products are designed and maintained with security in mind. The CRA's key benefits include:
+
+\begin{itemize}
+    \item Harmonized rules: Consistent rules for products with a digital component.
+    \item Cybersecurity framework: Requirements for planning, design, development, and maintenance of products.
+    \item Duty of care: Obligation to ensure product security throughout its lifecycle.
+    \item Consumer protection: Improved ability for consumers to make informed choices.
+    \item Business security: Enhanced protection for businesses using digital products.\footnote{See \textit{EU (2024)}: Cyber Resiliency Act. \cite{cyberResiliency}}
+\end{itemize}
+
+\subsubsection{EU Cyber Solidarity Act}
+
+The Act seeks to improve preparedness, detection, and response to significant cybersecurity threats by establishing a European Cybersecurity Alert System and a comprehensive Cybersecurity Emergency Mechanism.
+
+Key features of the EU Cyber Solidarity Act:
+
+\begin{itemize}
+    \item European Cybersecurity Alert System: This system will consist of interconnected Security Operation Centers (SOCs) across the EU, using advanced technologies like AI and data analytics to detect and share threat warnings.
+    \item Cybersecurity Emergency Mechanism: This mechanism will provide a framework for coordinated responses to large-scale cyberattacks and crises.
+    \item Enhanced capacities: The Act will strengthen the EU's capacity to detect, prepare for, and respond to cybersecurity incidents.
+\end{itemize}
+
+The European Cybersecurity Shield, a component of the Act, is a pilot initiative involving three cross-border Security Operations Center consortia. Launched in November 2022, this pilot project aims to test and refine the concept of a networked system of SOCs for early threat detection and sharing.\footnote{See \textit{EU (2024)}: Cyber Solidarity Act. \cite{cyberSol}}
+
+\subsection{Bundesamt für Sicherheit in der Informationstechnik}
+
+The BSI in Germany refers to the Bundesamt für Sicherheit in der Informationstechnik (Federal Office for Information Security). It's Germany's national cybersecurity authority and was established in 1991.
+
+The BSI is headquartered in Bonn and operates under the Federal Ministry of the Interior. It plays a crucial role in Germany's national cybersecurity strategy and works closely with international partners such as NIST on cybersecurity matters.
+
+Among other things, the current draft bill provides for an amendment to the BSI Act (BSIG) and an expansion of the group of regulated organizations to include important and particularly important institutions.\footnote{See \textit{BSI (2025)}: NIS-2-Regierungsentwurf. \cite{presseNis2}}
+
+In its new role, the BSI will in the future supervise approximately 29,500 institutions subject to new legal obligations in the area of IT security.
+
+\subsection{Placeholder Listing}
+
+\begin{lstlisting}[caption=Kube-bench Job, frame=single, basicstyle=\ttfamily]
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kube-bench          
+\end{lstlisting}
+
+\subsection{Incident Handling requirements}
+
+\subsection{Reporting requirements}
+
+\subsection{NIS2 Article 21}
+
+The NIS2 directive itself is a legal document organized into Chapters and Articles. It has a pan-European scope and targets critical businesses. NIS2 applies to many entities that provide essential services to the European economy and society, such as Operators of Essential Services (OES) and Digital Service Providers (DSPs). While NIS2 primarily targets medium and large enterprises, smaller entities may still be affected, depending on the services they provide.
+
+As we've seen, much of the content concerns reporting requirements and EU-wide cooperation and institutions, which we will not analyze further in this paper.\footnote{See \textit{EU (2022)}: NIS2 Directive. \cite{nis2}}
+
+Article 21, however, defines the required Cybersecurity risk-management measures for critical infrastructure. In paragraph 2, point (g), NIS2 calls for basic cyber hygiene practices and cybersecurity training.
+
+Any entity covered by the directive must, thus, have an IT Security Policy to implement basic cyber hygiene.\footnote{See \textit{NIS 2 Compliant.org (2024)}: List of Policies Required by NIS 2 Directive. \cite{nisPols}} To strengthen their security postures, entities could rely on one of the major frameworks and standards, such as the NIST SP 800 series, ISO/IEC 27001, Mitre Att\&ck, or CIS Controls.\footnote{See \textit{NIS 2 Compliant.org (2024)}: Requirements Checklist for NIS 2. \cite{nisReqs}}
+
+NIS2 is a legal framework, and compliance will be mandatory for European critical entities, ensuring widespread adoption. Unlike the CISecurity or ISO 27001 frameworks, adherence to the NIS2 Directive's requirements is not optional for entities classified as important or particularly important; it will be mandated by law.
+
+In addition to Article 21, the NIS2 Directive also contains Article 23, which outlines the requirements for EU-wide incident reporting. Article 23 defines what constitutes an incident, the mandatory reports, and the content required in these reports. With pan-European reporting of cyber attacks, a coordinated response should become much more manageable.
+
+In the next chapter, we will conduct our experiment and validate our findings - more text.

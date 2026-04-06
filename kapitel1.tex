@@ -1,0 +1,101 @@
+%
+%	Einführung
+%
+
+\pagebreak
+\section{Introduction}
+
+\onehalfspacing
+
+\subsection{Cyber Security}
+
+Cybersecurity, also called information security or IT security, is the practice of protecting systems, networks, and programs from digital attacks. It aims to reduce the risk of these attacks and prevent the unauthorized exploitation of systems, networks, and technology.
+
+Cybersecurity is an ongoing process because threats and attack vectors are constantly evolving. Organizations and individuals must proactively implement security measures and stay up to date on the latest threats.\footnote{See \textit{Gemini (2024)}: What is Cyber Security. \cite{bardCybersec}}
+
+The CIA-Triad defines the key components of Information Security:
+
+\begin{itemize}
+    \item Confidentiality
+    \item Integrity
+    \item Availability\footnote{See \textit{Washington University (2025)}: The CIA Triad. \cite{ciaTriad}} 
+\end{itemize}
+
+To address the availability of public infrastructure, our government has introduced the KRITIS designation, expanded the coverage of the BSI Act, and introduced the KRITIS-DachG.\footnote {See \textit{BSI (2024)}: What are Critical Infrastructures. \cite{whatKritis}}
+
+On a European level, NIS2 codifies this.
+
+In a previous paper.\footnote{See \textit{Frank, C. (2024)}: NIS2 and CIS Controls 2. \cite{previousPaper}}
+
+\subsection{NIS2}
+
+NIS2, short for the Network and Information Systems Directive II, is the EU's legislative act to strengthen cybersecurity across the European Union. It's essentially an update to the original NIS Directive implemented in 2016.
+
+It imposes stricter requirements across sectors to enhance security for essential entities. These entities include organizations in critical sectors like energy, transport, waste management, healthcare, and digital infrastructure providers.\footnote{See \textit{NIS 2 Compliant.org (2024)}: Comprehensive Guide to the NIS 2 Directive. \cite{nisGuide}}
+
+Compared to the original directive, NIS2 applies to a broader range of businesses and organizations. It recognizes the importance of securing the supply chain, including measures to address vulnerabilities in third-party vendors and suppliers.
+
+It also emphasizes a risk-based approach to cybersecurity. Organizations must identify and assess their security risks and implement appropriate mitigation measures. Classical tools from Business Continuity Management, such as Risk Impact Analysis and Business Impact Analysis, are now essential parts of the cybersecurity toolkit.\footnote{See \textit{BSI (2025)}: Business Impact Analysis. \cite{bsiBCM}}
+
+NIS2 entered into force on January 16, 2023, and the Member States had 21 months, until October 17, 2024, to transpose its measures into national law.\footnote{See \textit{Negreiro-Achiaga, M. (2023)}: The NIS2 Directive. \cite{nisBrief}}
+
+As of the time of writing, the German government has just presented a proposal to the legislature to codify NIS2 into national law.\footnote{See \textit{BSI (2025)}: NIS-2-Regierungsentwurf. \cite{presseNis2}}
+
+In Germany, NIS2 entered into force in national law on December 6, 2025.\footnote{See \textit{Bundesregierung (2025)}: Mehr digitale Sicherheit. \cite{nis2Breg}}$^{,\thinspace}$\footnote{See \textit{BMI (2025)}: Entwurf eines Gesetzes. \cite{nis2Umsucg}}
+
+\subsection{Kubernetes}
+
+Kubernetes (K8S) is an open-source system designed to automate the deployment, scaling, and management of applications built with containers. Containers package software in a standardized unit that includes all dependencies required to run the software, such as code, libraries, and settings. This makes them portable and efficient.
+
+Kubernetes helps manage these containers by logically grouping them. This makes it easier to track and manage complex applications with many containers. The original inspiration for Kubernetes came from Google's internal container orchestration system, Borg.\footnote{See \textit{Gemini (2024)}: What is Kubernetes. \cite{bardKubernetes}} 
+
+In 2015, Kubernetes reached the 1.0 milestone, and in 2016, it was donated to the CNCF; the current release of Kubernetes is 1.35, codenamed Timbernets.
+
+"2025 began in the shimmer of Octarine: The Color of Magic (v1.33) and rode the gusts of Wind \& Will (v1.34). We close the year with our hands on the World Tree, inspired by Yggdrasil, the tree of life that binds many realms. Like any great tree, Kubernetes grows ring by ring and release by release, shaped by the care of a global community."\footnote{\textit{Bhende, A. (2025)}: Kubernetes 1.35. \cite{timbernetes}}
+
+\begin{figure}[H]
+\centering
+\caption {Kubernetes 1.35 Release Logo}
+\includegraphics[width=0.3\linewidth]{images/k8s-1.35.png}
+\label{fig:timbernetes}
+\end{figure}
+
+\subsection{SUSE Security}
+
+Text
+
+\subsection{Research Question \& Method}
+
+For this paper, we will focus on the practical aspects of ongoing NIS2 compliance and reporting in the context of IT Security practice. To further narrow the scope, we will concentrate on the Kubernetes platform.
+
+The goal of this paper is to evaluate the use of SUSE Security in combination with on-premise LLMs in air-gapped environments to assess whether this setup can support compliance, ongoing analysis, and reporting requirements.
+
+Recent research has highlighted the importance of behavioral analysis for IT security, and we aim to determine whether an LLM can support it.\footnote{See \textit{Markovich, S. (2025)}: Security coverage is falling behind. \cite{expScribbr}}
+
+In an experiment, we will set up a Kubernetes cluster and SUSE Security, and connect the events stream to a local LLM.\footnote{See \textit{Genau, L. (2020)}: Ein Experiment in Deiner Abschlussarbeit Durchführen. \cite{expScribbr}}
+
+Feeding the stream of security events, we will try to have the LLM provide meaningful summaries and identify behavioral patterns.
+
+\subsection{Evaluation Strategy}
+
+We will examine the LLM output from our experiment and assess its relevance to ongoing NIS2 compliance.
+
+Using the results, we will evaluate whether our proposed setup can provide information on the level of NIS2 compliance for Kubernetes clusters, offer actionable insights to help maintain NIS2 compliance by creating incidents, and support the ongoing reporting requirements.
+
+We also hope to briefly connect to DORA compliance and provide insights into behavioral analysis.
+
+\subsection{Velocity}
+
+The world of Kubernetes moves fast, but the world of AI moves much faster.
+
+\subsection{Gender-neutral Pronouns}
+
+Our society is becoming more open, inclusive, and gender-fluid, and now I think it's time to think about using gender-neutral pronouns in scientific texts, too. Two well-known researchers, Abigail C. Saguy and Juliet A. Williams, both from UCLA, propose to use the singular they/them instead: "The universal singular they is inclusive of people who identify as male, female, or nonbinary."\footnote{\textit{Saguy, A. (2020)}: Why We Should All Use They/Them Pronouns. \cite{pronouns}} The aim is to support an inclusive approach in science through gender-neutral language. 
+
+In this paper, I'll attempt to follow this suggestion and invite all my readers to do the same for future articles. Thank you!
+
+If you're not sure about the definitions of gender and sex and how to use them, have a look at the definitions by the American Psychological Association.\footnote{See \textit{APA (2021)}: Definitions Related to Sexual Orientation. \cite{apaDefinitions}}
+
+\subsection{Climate Emergency}
+
+As Professor Rahmstorf puts it: "Without immediate, decisive climate protection measures, my children currently attending high school could already experience a 3-degree warmer Earth. No one can say exactly what this world would look like—it would be too far outside the scope of human experience. But almost certainly, this earth would be full of horrors for the people who would have to experience it."\footnote{\textit{Rahmstorf, A. (2024)}: Climate and Weather at 3 Degrees More. \cite{3dgreesMore}}
