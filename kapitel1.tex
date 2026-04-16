@@ -9,9 +9,7 @@
 
 \subsection{Cyber Security}
 
-Cybersecurity, also called information security or IT security, is the practice of protecting systems, networks, and programs from digital attacks. It aims to reduce the risk of these attacks and prevent the unauthorized exploitation of systems, networks, and technology.
-
-Cybersecurity is an ongoing process because threats and attack vectors are constantly evolving. Organizations and individuals must proactively implement security measures and stay up to date on the latest threats.\footnote{See \textit{Gemini (2024)}: What is Cyber Security. \cite{bardCybersec}}
+Cybersecurity, also known as information security (InfoSec) or IT security, is the practice of safeguarding systems, networks, programs, and data from digital attacks. These attacks aim to disrupt, damage, or gain unauthorized access to sensitive information, systems, or infrastructure. Cybersecurity is not just about defending against threats; it's about preserving the confidentiality, integrity, and availability of digital assets—often referred to as the CIA Triad, the cornerstone of information security.\footnote{See \textit{Gemini (2026)}: What is Cyber Security. \cite{bardCybersec}}
 
 The CIA-Triad defines the key components of Information Security:
 
@@ -21,33 +19,82 @@ The CIA-Triad defines the key components of Information Security:
     \item Availability\footnote{See \textit{Washington University (2025)}: The CIA Triad. \cite{ciaTriad}} 
 \end{itemize}
 
+In today's interconnected world, cybersecurity is critical for:
+
+\begin{itemize}
+    \item Individuals: Protecting personal data (e.g., financial information, social media accounts) from identity theft or fraud.
+    \item Businesses: Safeguarding customer data, intellectual property, and operational continuity from cyber threats like ransomware or phishing attacks.
+    \item Governments and Critical Infrastructure: Defending against cyber espionage, sabotage, or attacks on essential services (e.g., power grids, healthcare systems).
+\end{itemize}
+
+Cybersecurity involves a multi-layered approach to mitigate risks, including:
+
+\begin{itemize}
+    \item Network Security: Protecting networks from intrusions (e.g., firewalls, VPNs).
+    \item Application Security: Ensuring software and applications are free from vulnerabilities (e.g., code reviews, patch management).
+    \item Endpoint Security: Securing devices like laptops, smartphones, and IoT devices (e.g., antivirus software, encryption).
+    \item Cloud Security: Protecting data and applications hosted in cloud environments (e.g., access controls, data encryption).
+    \item Data Security: Safeguarding sensitive information from unauthorized access or leaks (e.g., encryption, data masking).
+    \item Identity and Access Management (IAM): Managing user access to systems and data (e.g., multi-factor authentication, role-based access control).
+\end{itemize}
+
+\subsection{Proactive Measures}
+
+Cybersecurity is not a one-time task but an ongoing process. This is because cyber threats and attack vectors are constantly evolving, driven by technological advances and the creativity of cybercriminals. For example:
+
+\begin{itemize}
+    \item Emerging Threats: New types of attacks, such as AI-powered phishing or quantum computing threats, require continuous adaptation of security measures.
+    \item Zero-Day Exploits: Vulnerabilities in software that are unknown to vendors and exploited by attackers before patches are available.
+    \item Social Engineering: Attackers increasingly use psychological manipulation (e.g., phishing emails, deepfake scams) to trick users into revealing sensitive information.
+\end{itemize}
+
 To address the availability of public infrastructure, our government has introduced the KRITIS designation, expanded the coverage of the BSI Act, and introduced the KRITIS-DachG.\footnote {See \textit{BSI (2024)}: What are Critical Infrastructures. \cite{whatKritis}}
+
+KRITIS stands for "kritische Infrastrukturen", which basically means "critical infrastructure" in German. This refers to all the essential public systems and services that our society depends on, such as power grids, transportation networks, communication networks, and healthcare facilities.
+
+The government has introduced the KRITIS designation to identify which of these infrastructure elements are most critical and require the highest level of protection. That way, they can focus their cybersecurity efforts on the most important and vulnerable parts.
+
+They've also expanded the coverage of the BSI Act, which is the "Gesetz zur Erhöhung der Sicherheit informationstechnischer Systeme" or the "IT Security Act". This law sets standards and requirements for securing information technology systems, especially for critical infrastructure providers.
+
+And to tie it all together, they've brought in the KRITIS-DachG, the "Gesetz über das Bundesamt für Sicherheit in der Informationstechnik und den Schutz Kritischer Infrastrukturen", which is the "Act on the Federal Office for Information Security and the Protection of Critical Infrastructures".
+
+This new law gives the government more power to oversee and enforce cybersecurity measures for critical infrastructure operators. The goal is to make sure these vital public services are as protected as possible against digital threats and attacks.
 
 On a European level, NIS2 codifies this.
 
-In a previous paper.\footnote{See \textit{Frank, C. (2024)}: NIS2 and CIS Controls 2. \cite{previousPaper}}
+In a previous paper, we evaluated the use of CIS Benchmarks to ensure NIS2 compliance\footnote{See \textit{Frank, C. (2025)}: NIS2 and CIS Controls 2. \cite{previousPaper}}; in this paper, we will focus on incident handling and reporting for NIS2.
 
 \subsection{NIS2}
 
-NIS2, short for the Network and Information Systems Directive II, is the EU's legislative act to strengthen cybersecurity across the European Union. It's essentially an update to the original NIS Directive implemented in 2016.
+NIS2, short for the Network and Information Systems Directive II, is the EU's legislative act to strengthen cybersecurity across the European Union. The original NIS Directive was adopted in 2016 to improve cybersecurity standards across the EU. NIS is an updated and expanded version of the original directive. The goal is to ensure that all key industries and services across Europe are better prepared to address cyber threats.
 
-It imposes stricter requirements across sectors to enhance security for essential entities. These entities include organizations in critical sectors like energy, transport, waste management, healthcare, and digital infrastructure providers.\footnote{See \textit{NIS 2 Compliant.org (2024)}: Comprehensive Guide to the NIS 2 Directive. \cite{nisGuide}}
+NIS2 applies to a much wider range of companies and organizations, not just the critical ones. Its security requirements are stricter and more comprehensive. There are greater penalties if companies don't follow the rules, and this gives national authorities greater power to enforce cybersecurity measures. Essential entities now include organizations in critical sectors like energy, transport, waste management, healthcare, and digital infrastructure providers.\footnote{See \textit{NIS 2 Compliant.org (2024)}: Comprehensive Guide to the NIS 2 Directive. \cite{nisGuide}}
 
-Compared to the original directive, NIS2 applies to a broader range of businesses and organizations. It recognizes the importance of securing the supply chain, including measures to address vulnerabilities in third-party vendors and suppliers.
+Compared to the original directive, NIS2 applies to a broader range of businesses and organizations. It also recognizes the importance of securing the supply chain, including measures to address vulnerabilities in third-party vendors and suppliers.
 
 It also emphasizes a risk-based approach to cybersecurity. Organizations must identify and assess their security risks and implement appropriate mitigation measures. Classical tools from Business Continuity Management, such as Risk Impact Analysis and Business Impact Analysis, are now essential parts of the cybersecurity toolkit.\footnote{See \textit{BSI (2025)}: Business Impact Analysis. \cite{bsiBCM}}
 
 NIS2 entered into force on January 16, 2023, and the Member States had 21 months, until October 17, 2024, to transpose its measures into national law.\footnote{See \textit{Negreiro-Achiaga, M. (2023)}: The NIS2 Directive. \cite{nisBrief}}
 
-As of the time of writing, the German government has just presented a proposal to the legislature to codify NIS2 into national law.\footnote{See \textit{BSI (2025)}: NIS-2-Regierungsentwurf. \cite{presseNis2}}
-
 In Germany, NIS2 entered into force in national law on December 6, 2025.\footnote{See \textit{Bundesregierung (2025)}: Mehr digitale Sicherheit. \cite{nis2Breg}}$^{,\thinspace}$\footnote{See \textit{BMI (2025)}: Entwurf eines Gesetzes. \cite{nis2Umsucg}}
 
 \subsection{Timbernetes}
 
-Kubernetes (K8S) is an open-source system designed to automate the deployment, scaling, and management of containerized applications. Containers package software in a standardized unit that includes all dependencies required to run the software, such as code, libraries, and settings. This makes them portable and efficient.
+Kubernetes (K8S) is an open-source platform for automating the deployment, scaling, and management of containerized applications. Developed by Google and now maintained by the Cloud Native Computing Foundation (CNCF), Kubernetes has become the de facto standard for managing containers at scale.
 
-Kubernetes helps manage these containers by logically grouping them. This makes it easier to track and manage complex applications with many containers. The original inspiration for Kubernetes came from Google's internal container orchestration system, Borg.\footnote{See \textit{Gemini (2024)}: What is Kubernetes. \cite{bardKubernetes}} 
+Before diving into Kubernetes, it's essential to understand containers. A container is a lightweight, standalone, executable package that includes everything needed to run a piece of software:
+
+\begin{itemize}
+    \item Code: The application itself.
+    \item Libraries: Dependencies and binaries required by the application.
+    \item Settings: Configuration files and environment variables.
+\end{itemize}
+
+Containers are isolated from each other and the host system, ensuring consistency across different environments (e.g., development, testing, production). This makes them portable, efficient, and easy to deploy.
+
+While containers address portability and consistency, managing them at scale introduces new challenges. Kubernetes addresses these challenges by providing a platform for automating the deployment of containers across a cluster of machines. We can define the desired state of your application (e.g., "I want 3 instances of my app running"), and Kubernetes ensures that state is maintained.
+
+Kubernetes abstracts the underlying infrastructure, allowing us to deploy applications anywhere—on-premises, in the cloud, or in hybrid environments—without changes. The original inspiration for Kubernetes came from Google's internal container orchestration system, Borg.\footnote{See \textit{Gemini (2024)}: What is Kubernetes. \cite{bardKubernetes}} 
 
 In 2015, Kubernetes reached the 1.0 milestone, and in 2016, it was donated to the CNCF; the current release of Kubernetes is 1.35, codenamed Timbernetes.
 
@@ -62,35 +109,63 @@ In 2015, Kubernetes reached the 1.0 milestone, and in 2016, it was donated to th
 
 \subsection{SUSE Security}
 
-Text
+SUSE Security is a critical component of SUSE, a global leader in open-source software solutions, particularly known for its enterprise Linux distributions (such as SUSE Linux Enterprise Server, or SLES). SUSE Security focuses on providing robust, reliable, and compliant security solutions for enterprises, governments, and organizations.\footnote{See \textit{SUSE (2026)}: SUSE Security. \cite{suseSec}}
+
+SUSE integrates security into its container and cloud solutions with SUSE NeuVector, a container security platform that provides runtime security, vulnerability scanning, and automated compliance checks for Kubernetes environments.
+
+NeuVector helps organizations meet regulatory and industry compliance standards by generating detailed audit reports that show compliance status and violations. NeuVector also provides tools for incident response:
+
+\begin{itemize}
+    \item Real-time alerts to notify security teams of suspicious activities
+    \item Forensic data captured in detailed logs and network traffic for post-incident analysis
+    \item Automated responses to quarantine compromised containers or block malicious traffic
+\end{itemize}
+
+SUSE also actively monitors and addresses Common Vulnerabilities and Exposures \(CVEs\) in all of its products, providing patches and mitigation guidance.
 
 \subsection{Research Question \& Method}
 
-For this paper, we will focus on the practical aspects of ongoing NIS2 compliance and reporting in the context of IT Security practice. To further narrow the scope, we will concentrate on the Kubernetes platform.
+In this paper, we focus on the practical aspects of ongoing NIS2 compliance, with a particular emphasis on incident handling and reporting in the context of IT Security practice. To further narrow the scope, we will concentrate on the Kubernetes platform and on security events only.
+
+For Kubernetes, we have selected SUSE NeuVector as platform to generate security events. Other choices could have been Aqua Security or Prisma Cloud.
 
 The goal of this paper is to evaluate the use of SUSE Security in combination with on-premise LLMs in air-gapped environments to assess whether this setup can support compliance, ongoing analysis, and reporting requirements.
 
 Recent research has highlighted the importance of behavioral analysis for IT security, and we aim to determine whether an LLM can support it.\footnote{See \textit{Markovich, S. (2025)}: Security coverage is falling behind. \cite{expScribbr}}
 
-In an experiment, we will set up a Kubernetes cluster and SUSE Security, and connect the events stream to a local LLM.\footnote{See \textit{Genau, L. (2020)}: Ein Experiment in Deiner Abschlussarbeit Durchführen. \cite{expScribbr}}
+In an experiment, we will set up a Kubernetes cluster and SUSE Security, and connect the security events stream to a local LLM.\footnote{See \textit{Genau, L. (2020)}: Ein Experiment in Deiner Abschlussarbeit Durchführen. \cite{expScribbr}}
 
-Feeding the stream of security events, we will try to have the LLM provide meaningful summaries and identify behavioral patterns.
+Feeding the stream of security events, we will try to have the LLM provide actionable information for incident handling and meaningful summaries for reporting.
 
 \subsection{Evaluation Strategy}
 
-We will examine the LLM output from our experiment and assess its relevance to ongoing NIS2 compliance.
+We will examine the LLM output and assess its relevance to the NIS2 directive. The NIS2 regulation has some key requirements when it comes to incident management:
 
-Using the results, we will evaluate whether our proposed setup can provide information on the level of NIS2 compliance for Kubernetes clusters, offer actionable insights to help maintain NIS2 compliance by creating incidents, and support the ongoing reporting requirements.
+\begin{itemize}
+    \item Organizations need to have robust incident detection and response processes in place
+    \item They must report significant incidents to the relevant national authorities promptly
+    \item The incident reporting needs to include details like the incident's impact, root causes, and mitigation measures
+\end{itemize}
 
-We also hope to briefly connect to DORA compliance and provide insights into behavioral analysis.
+As we analyze the LLM output, we want to determine whether it provides insights that could help organizations meet the NIS2 compliance requirements. Will the output identify potential incident scenarios? Can it suggest ways to detect and respond to incidents quickly? Does it indicate the kind of information that should be included in incident reports?
+
+Using the results, we will evaluate whether our proposed setup can provide actionable insights to help maintain NIS2 compliance and support incident creation and ongoing reporting requirements.
 
 \subsection{Velocity}
 
-The world of Kubernetes moves fast, but the world of AI moves much faster.
+The world of Kubernetes moves fast, but the world of AI moves much faster. The pace of innovation in artificial intelligence has been absolutely breathtaking in recent years. Breakthroughs are happening at a dizzying rate, with new models and capabilities emerging seemingly every few months.
+
+The availability of massive datasets and ever-increasing computing power has allowed AI systems to learn and evolve at an exponential pace. Researchers can now train complex neural networks at scales that were unimaginable just a decade ago. Additionally, the open-source movement and collaborative nature of the AI community have accelerated knowledge sharing and iteration. Researchers can build on one another's work, rapidly iterating and pushing the boundaries of what's possible.
+
+The real-world impact of these AI advancements is also driving further investment and innovation. As the technology demonstrates its transformative potential across industries, from healthcare to finance to transportation, the incentive to develop even more powerful and capable systems has intensified. It's a virtuous cycle of progress that shows no signs of slowing down anytime soon.
+
+Ultimately, the velocity of AI development is a testament to the incredible potential of this technology. The pace of change is exhilarating, and we can expect to see even more groundbreaking AI achievements in the years to come as the field continues to evolve at a truly breakneck speed. 
+
+For the slow-moving process of writing a paper, this unfortunately means that some information might already be outdated by the time of publication. Nevertheless, we hope that the reasoning outlined in this paper will still prove useful.
 
 \subsection{Gender-neutral Pronouns}
 
-Our society is becoming more open, inclusive, and gender-fluid, and now I think it's time to think about using gender-neutral pronouns in scientific texts, too. Two well-known researchers, Abigail C. Saguy and Juliet A. Williams, both from UCLA, propose to use the singular they/them instead: "The universal singular they is inclusive of people who identify as male, female, or nonbinary."\footnote{\textit{Saguy, A. (2020)}: Why We Should All Use They/Them Pronouns. \cite{pronouns}} The aim is to support an inclusive approach in science through gender-neutral language. 
+Our society is becoming more open, inclusive, and gender-fluid, and now I think it's time to think about using gender-neutral pronouns in scientific texts, too. Two well-known researchers, Abigail C. Saguy and Juliet A. Williams, both from UCLA, propose to use the singular they/them instead: "The universal singular they is inclusive of people who identify as male, female, or nonbinary." \footnote{\textit{Saguy, A. (2020)}: Why We Should All Use They/Them Pronouns. \cite{pronouns}} The aim is to support an inclusive approach in science through gender-neutral language. 
 
 In this paper, I'll attempt to follow this suggestion and invite all my readers to do the same for future articles. Thank you!
 
@@ -98,4 +173,4 @@ If you're not sure about the definitions of gender and sex and how to use them, 
 
 \subsection{Climate Emergency}
 
-As Professor Rahmstorf puts it: "Without immediate, decisive climate protection measures, my children currently attending high school could already experience a 3-degree warmer Earth. No one can say exactly what this world would look like—it would be too far outside the scope of human experience. But almost certainly, this earth would be full of horrors for the people who would have to experience it."\footnote{\textit{Rahmstorf, A. (2024)}: Climate and Weather at 3 Degrees More. \cite{3dgreesMore}}
+As Professor Rahmstorf puts it: "Without immediate, decisive climate protection measures, my children currently attending high school could already experience a 3-degree warmer Earth. No one can say exactly what this world would look like—it would be too far outside the scope of human experience. But almost certainly, this earth would be full of horrors for the people who would have to experience it." \footnote{\textit{Rahmstorf, A. (2024)}: Climate and Weather at 3 Degrees More. \cite{3dgreesMore}}
