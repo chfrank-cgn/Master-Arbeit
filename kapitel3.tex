@@ -20,27 +20,6 @@
 \label{fig:event-stream}
 \end{figure}
 
-\subsection{Placeholder Table}
-
-\begin{table}[ht]
-  \caption{CIS Controls in AKS Benchmark v1.7}
-    \begin{tabular}{| l | l | l |}
-    \hline
-    ID & Auto & Description \\
-    \hline\hline
-    2.5 & N & Allowlist Authorized Software \\
-    \hline
-    3.3 & Y & Configure Data Access Control Lists \\
-    \hline
-    3.10 & Y & Encrypt Sensitive Data in Transit \\
-    \hline
-    3.11 & Y & Encrypt Sensitive Data at Rest \\
-    \hline
-    3.12 & Y & Segment Data Processing and Storage Based on Sensitivity \\
-    \hline
-    \end{tabular}%
-  \label{tab:aksBenchmark}%
-\end{table}%
 
 \subsection{Experiment setup}
 
@@ -50,11 +29,52 @@
 
 \subsection{Ollama}
 
+Ollama is currently surrounded by controversy about license compliance, attribution, and transparency regarding how Ollama uses (or used) the open-source project llama.cpp. Several voices argue that one should not continue to use Ollama, especially if one prioritizes transparency and performance.\footnote{See \textit{Zetaphor (2025)}: Friends don't let Friends use Ollama. \cite{ollamaDrama}}
+
+Alternatives could be running llama.cpp directly, or exploring other tools such as vLLM or KoboldCPP.
+
 \subsection{Bridge}
 
 \subsection{Elasticsearch}
 
 \subsection{Results}
+
+\begin{lstlisting}[caption=Event Bridge Log, frame=single, basicstyle=\ttfamily, breaklines=true]
+You are a helpful Kubernetes security expert
+Welcome to the Neuvector event bridge!
+meow :3
+
+notification=audit, name=Compliance.ContainerFile.Violation, level=Warning, reported_timestamp=1775940060, reported_at=2026-04-11T20:41:00Z, cluster_name=aks-893050, enforcer_name=neuvector-enforcer-pod-p4dr5, workload_name=cattle-cluster-agent-74cb77b56c-85v9w, workload_domain=cattle-system, workload_image=docker.io/rancher/rancher-agent:v2.12.3, workload_service=cattle-cluster-agent.cattle-system, critical_vul_cnt=0, high_vul_cnt=0, medium_vul_cnt=0, message=, items=[D.4.8 WARN - Total 2 files have setgid mode D.4.8 WARN - Total 13 files have setuid mode]
+ 
+\end{lstlisting}
+
+\subsection{Software Versions}
+
+In the experiment, the following open-source software versions were used.
+
+\begin{table}[ht]
+  \caption{Software Versions}
+    \begin{tabular}{| l | l |}
+    \hline
+    Software & Version  \\
+    \hline\hline
+    Elasticsearch & 8.19.3  \\
+    \hline
+    MCP-Server & 0.0.60  \\
+    \hline
+    Mosquitto & 2.0.22  \\
+    \hline
+    Ollama & 0.14.2  \\
+    \hline
+    Rancher & 2.12.3  \\
+    \hline
+    Syslog-ng & 4.10.2  \\
+    \hline
+    \end{tabular}%
+  \label{tab:aksBenchmark}%
+\end{table}%
+
+Some of the versions are most likely outdated by now.
 
 \subsection{MCP Server}
 
@@ -64,3 +84,4 @@
 \includegraphics[width=0.9\linewidth]{images/mcp-server.png}
 \label{fig:mcp-server}
 \end{figure}
+
