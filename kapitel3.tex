@@ -3,7 +3,7 @@
 %
 
 \pagebreak
-\section{Security Event Handling}
+\section{Security Event Stream}
 
 \onehalfspacing
 
@@ -29,7 +29,7 @@
 
 \subsection{Ollama}
 
-Ollama is currently surrounded by controversy about license compliance, attribution, and transparency regarding how Ollama uses (or used) the open-source project llama.cpp. Several voices argue that one should not continue to use Ollama, especially if one prioritizes transparency and performance.\footnote{See \textit{Zetaphor (2025)}: Friends don't let Friends use Ollama. \cite{ollamaDrama}}
+Ollama is currently embroiled in controversy over license compliance, attribution, and transparency regarding how Ollama uses (or used) the open-source project llama.cpp. Several voices argue that one should not continue to use Ollama, especially if one prioritizes transparency and performance.\footnote{See \textit{Zetaphor (2025)}: Friends don't let Friends use Ollama. \cite{ollamaDrama}}
 
 Alternatives could be running llama.cpp directly, or exploring other tools such as vLLM or KoboldCPP.
 
@@ -56,25 +56,29 @@ In the experiment, the following open-source software versions were used.
   \caption{Software Versions}
     \begin{tabular}{| l | l |}
     \hline
-    Software & Version  \\
+    Software & Version \\
     \hline\hline
-    Elasticsearch & 8.19.3  \\
+    Elasticsearch & 8.19.3 \\
     \hline
-    MCP-Server & 0.0.60  \\
+    Kubernetes (AKS) & 1.33.8 \\
     \hline
-    Mosquitto & 2.0.22  \\
+    MCP-Server & 0.0.60 \\
     \hline
-    Ollama & 0.14.2  \\
+    Mosquitto & 2.0.22 \\
     \hline
-    Rancher & 2.12.3  \\
+    NeuVector & 5.4.9 \\
     \hline
-    Syslog-ng & 4.10.2  \\
+    Ollama & 0.14.2 \\
+    \hline
+    Rancher & 2.12.3 \\
+    \hline
+    Syslog-ng & 4.10.2 \\
     \hline
     \end{tabular}%
   \label{tab:aksBenchmark}%
 \end{table}%
 
-Some of the versions are most likely outdated by now.
+Some of the versions above are likely superseded.
 
 \subsection{MCP Server}
 
