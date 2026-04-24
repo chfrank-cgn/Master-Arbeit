@@ -127,7 +127,7 @@ SUSE also actively monitors and addresses Common Vulnerabilities and Exposures \
 
 In this paper, we focus on the practical aspects of ongoing NIS2 compliance, with a particular emphasis on incident handling and reporting in the context of IT Security practice. To further narrow the scope, we will concentrate on the Kubernetes platform and on security events only.
 
-For Kubernetes, we have selected SUSE NeuVector as platform to generate security events. Other choices could have been Aqua Security or Prisma Cloud.
+For Kubernetes, we have selected SUSE NeuVector as the platform to generate security events. Other choices could have been Aqua Security or Prisma Cloud.
 
 The goal of this paper is to evaluate the use of SUSE Security in combination with on-premise LLMs in air-gapped environments to assess whether this setup can support compliance, ongoing analysis, and reporting requirements.
 
@@ -151,6 +151,8 @@ As we analyze the LLM output, we want to determine whether it provides insights 
 
 Using the results, we will evaluate whether our proposed setup can provide actionable insights to help maintain NIS2 compliance and support incident creation and ongoing reporting requirements.
 
+We will also examine whether this approach could mitigate alert fatigue.
+
 \subsection{Velocity}
 
 The world of Kubernetes moves fast, but the world of AI moves much faster. The pace of innovation in artificial intelligence has been absolutely breathtaking in recent years. Breakthroughs are happening at a dizzying rate, with new models and capabilities emerging seemingly every few months.
@@ -162,6 +164,8 @@ The real-world impact of these AI advancements is also driving further investmen
 Ultimately, the velocity of AI development is a testament to the incredible potential of this technology. The pace of change is exhilarating, and we can expect to see even more groundbreaking AI achievements in the years to come as the field continues to evolve at a truly breakneck speed. 
 
 For the slow-moving process of writing a paper, this unfortunately means that some information might already be outdated by the time of publication. Nevertheless, we hope that the reasoning outlined in this paper will still prove useful.
+
+The company DefectDojo has recently released, with its agent Sensei, a first commercial product offering that incorporates some of the ideas presented here.\footnote{See \textit{DefectDojo (2025)}: DefectDojo Sensei. \cite{senseiDD}}
 
 \subsection{Gender-neutral Pronouns}
 
