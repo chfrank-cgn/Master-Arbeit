@@ -29,6 +29,12 @@
 
 \subsection{Ollama}
 
+Tool to run LLMs locally.
+
+Self-hosting is not for everyone.\footnote{See \textit{Davies, N. (2026)}: Self-Hosted LLMs in the Real World. \cite{selfHost}}
+
+Several factors should be considered when selecting a local model.\footnote{See \textit{Conway, A. (2026)}: A local LLM for coding. \cite{localModel}}
+
 Ollama is currently embroiled in controversy over license compliance, attribution, and transparency regarding its use of the open-source project llama.cpp. Several voices argue that one should not continue to use Ollama, especially if one prioritizes transparency and performance.\footnote{See \textit{Zetaphor (2025)}: Friends don't let Friends use Ollama. \cite{ollamaDrama}}
 
 Alternatives could be running llama.cpp directly, or exploring other tools such as vLLM or KoboldCPP.
@@ -90,5 +96,11 @@ Some of the versions above are likely superseded.
 \end{figure}
 
 \subsection{Air Gap}
+
+After training, model knowledge quickly becomes outdated.
+
+As discussed in \ref{threat-intelligence}, it's important to amend the model knowledge with current information.
+
+Another factor to consider is model bias.\footnote{See \textit{Xu, J. et al. (2026)}: AI self preference. \cite{xu2026}}
 
 \subsection{GDPR}
