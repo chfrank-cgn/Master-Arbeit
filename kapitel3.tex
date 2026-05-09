@@ -3,7 +3,7 @@
 %
 
 \pagebreak
-\section{Security Event Stream}
+\section{Experiment}
 
 \onehalfspacing
 
@@ -23,7 +23,26 @@ For our experiment, we will focus on security signals from SUSE Security (former
 
 \subsection{SUSE Security Configuration}
 
-\subsection{Experiment setup}
+NeuVector includes a configuration for IBM's QRadar SIEM platform. While IBM has sold the QRadar SaaS business to Palo Alto Networks, it retains the on-premises version and partners with major corporations for log and signal analysis, including Cloudflare.\footnote{See \textit{Sharma, T. (2022)}: Leverage IBM QRadar SIEM. \cite{cloudRadar}}
+
+NeuVector utilizes the Syslog\footnote{See \textit{Gerhards, R. (2029)}: The Syslog Protocol. \cite{syslog}} protocol to send its security signals to the analysis platform.
+
+\begin{figure}[H]
+\centering
+\caption {Neuvector Syslog Configuration}
+\includegraphics[width=0.9\linewidth]{images/neuvector-syslog.png}
+\label{fig:nv-syslog}
+\end{figure}
+
+We'll use NeuVector's syslog configuration to forward the security events to our setup.
+
+\subsection{Event Stream Handling}
+
+The setup will handle the incoming data stream and forward the signals to a local LLM for analysis and an Elasticsearch instance for storage and consolidation.
+
+Dual processing enables immediate reaction and long-term forensic analysis, both of which are needed for NIS2 compliance.
+
+A schematic overview of the setup illustrates the flow of events through the individual components.
 
 \begin{figure}[H]
 \centering
@@ -32,27 +51,95 @@ For our experiment, we will focus on security signals from SUSE Security (former
 \label{fig:event-stream}
 \end{figure}
 
+In what follows, we outline the selected components and the rationale for their selection.
+
 \subsection{Syslog}
+
+Syslog-ng and rsyslog are the two most popular syslog server implementations for Linux environments, but they differ in key ways. 
+
+Syslog-ng is more feature-rich and flexible, with a powerful configuration language, built-in support for message parsing and reformatting, and the ability to store log messages in various databases. It also has a commercial version with additional features and support. 
+
+Rsyslog is lighter and faster, designed to efficiently handle large volumes of log messages. It has a simpler configuration language and relies on external plugins for advanced functionality. Rsyslog is fully open-source and free to use.
+
+Both would have been equally good choices; in the end, the available destinations made syslog-ng the better fit.\footnote{See \textit{syslog-ng OSE (2026)}: syslog-ng destination options. \cite{ngDestinations}}
+
+In this setup, Syslog-ng runs a single-replica deployment and exposes the standard syslog TCP port 514 as a service, which we have configured in NeuVector above.
+
+\begin{lstlisting}[caption=Syslog Service definition, frame=single, basicstyle=\ttfamily, breaklines=true]
+apiVersion: v1
+kind: Service
+metadata:
+  name: syslog
+  namespace: qradar
+spec:
+  ports:
+    - port: 514
+      targetPort: 514
+      protocol: TCP
+  selector:
+    app: syslog
+
+\end{lstlisting}
 
 \subsection{MQTT}
 
+Given the high volume of data, it's good practice and an established design pattern to use a message broker.\footnote {See \textit{Calloway, A. (2026)}: When to use a Message Broker. \cite{mqttPattern}}
+
+Eclipse Mosquitto is the dominant, most widely used open-source, lightweight MQTT broker. MQTT brokers use a publish-subscribe (pub/sub) messaging model. A service publishes a message to the broker, which then routes it to the appropriate subscribers.\footnote {See \textit{mosquitto.org (2026)}: What is an MQTT Broker. \cite{whatBroker}}
+
+In this setup, Mosquitto runs as a single replica deployment, exposing the standard MQTT port 1883 through a cluster service.
+
+To receive the event stream, we instruct syslog-ng to publish each individual signal to the topic qradar/neuvector of our broker:
+
+\begin{lstlisting}[caption=Destination d-mqtt, frame=single, basicstyle=\ttfamily, breaklines=true]
+destination d_mqtt {
+    mqtt(
+    address("tcp://mosquitto:1883"),
+    topic("qradar/neuvector"),
+    fallback-topic("syslog/fallback"),
+    template("$$MESSAGE"));
+};
+
+\end{lstlisting}
+
 \subsection{Ollama}
 
-Tool to run LLMs locally.
+As of the time of writing, several tools are available for running AI models locally.\footnote {See \textit{Calloway, A. (2026)}: Common Applications to Run AI Models Locally. \cite{localLlama}}
 
-Self-hosting is not for everyone.\footnote{See \textit{Davies, N. (2026)}: Self-Hosted LLMs in the Real World. \cite{selfHost}}
+There is Ollama, an open-source tool to run LLMs locally. Ollama supports models such as Gemma, Llama, Mistral, and Qwen and provides a widely publicized API for programmatic access.
 
-Several factors should be considered when selecting a local model.\footnote{See \textit{Conway, A. (2026)}: A local LLM for coding. \cite{localModel}}
+Then there is LM Studio, a GUI-based tool for downloading and running LLMs locally. There is also llama.cpp, a C++ tool and library for running LLMs efficiently locally on CPUs/GPUs, and finally vLLM and KoboldCpp.
+
+Ollama is part of the SUSE AI stack and provides ready-made Kubernetes deployment files, making it an easy choice.\footnote {See \textit{SUSE (2026)}: SUSE AI Stack. \cite{suseAI}} Self-hosting, though, is not for everyone, even on Kubernetes.\footnote{See \textit{Davies, N. (2026)}: Self-Hosted LLMs in the Real World. \cite{selfHost}}
+
+Several factors should be considered when selecting a local model, which we will cover in the following chapters.\footnote{See \textit{Conway, A. (2026)}: A local LLM for coding. \cite{localModel}} For the setup, we will start with gemma3 as our model.
 
 Ollama is currently embroiled in controversy over license compliance, attribution, and transparency regarding its use of the open-source project llama.cpp. Several voices argue that one should not continue to use Ollama, especially if one prioritizes transparency and performance.\footnote{See \textit{Zetaphor (2025)}: Friends don't let Friends use Ollama. \cite{ollamaDrama}}
 
-Alternatives could be running llama.cpp directly, or exploring other tools such as vLLM or KoboldCPP.
+In the light of this controversy, one could consider running llama.cpp directly instead, or explore other tools such as vLLM or KoboldCpp.
 
 \subsection{Bridge}
 
-\subsection{Elasticsearch}
+With the message broker and the API in place, we now need to integrate them. For this purpose, we will use a Python program that subscribes to the neuvector/qradar topic on our MQTT broker and forwards the message to Ollama.
 
-\subsection{Results}
+\begin{lstlisting}[caption=Event Bridge Excerpt, frame=single, basicstyle=\ttfamily, breaklines=true]
+from openai import OpenAI
+import paho.mqtt.client as paho
+
+# Connect callback
+def on_connect(mosq, obj, flags, reason_code, properties=None):
+  client.subscribe("qradar/neuvector")
+
+# Ollama connect
+ollama = OpenAI(base_url='http://ollama.ollama.svc:11434', api_key='ollama')
+model = 'gemma3'
+messages = [ 
+  {"role": "system", "content": "You are a helpful Kubernetes security expert."}
+]
+
+\end{lstlisting}
+
+Once Neuvector sends a signal to our SIEM via Syslog, it reaches our bridge via the MQTT broker, enabling us to act on it immediately.
 
 \begin{lstlisting}[caption=Event Bridge Log, frame=single, basicstyle=\ttfamily, breaklines=true]
 You are a helpful Kubernetes security expert
@@ -63,9 +150,44 @@ notification=audit, name=Compliance.ContainerFile.Violation, level=Warning, repo
  
 \end{lstlisting}
 
+We will examine possible immediate actions, such as creating an incident, in the next chapters.
+
+\subsection{Elasticsearch}
+
+Elasticsearch has long been the gold standard for log file storage and analysis in IT. While there are many alternatives, such as Grafana Loki or Splunk, many IT operations rely on Elasticsearch or its forked cousin, OpenSearch.
+
+In our setup, we will use an Elasticsearch instance for long-term storage of security events and for forensic analysis.
+
+Syslog-ng allows sending the events directly to Elasticsearch, with no post-processing needed.
+
+\begin{lstlisting}[caption=Destination d-elastic, frame=single, basicstyle=\ttfamily, breaklines=true]
+destination d_elastic {
+    elasticsearch-http(
+        index("neuvector"),
+        op_type("create"),
+        batch-bytes(0),
+        batch-lines(0),
+        url("http://elasticsearch:9200/_bulk"));
+};
+
+\end{lstlisting}
+
+The standard interface to Elasticsearch data is the Kibana interface, and without defining any dashboards, we can analyze security events in Discover.
+
+\begin{figure}[H]
+\centering
+\caption {Discover}
+\includegraphics[width=0.9\linewidth]{images/neuvector-kibana.png}
+\label{fig:neuvector-kibana}
+\end{figure}
+
+In addition to the ability to immediately respond to security events via the bridge and the local LLM, we now also have a long-term view of security events on our platform.
+
+In the following chapters, we will explore options, such as comprehensive reporting on security events, for using this data to fulfill obligations under NIS2.
+
 \subsection{Software Versions}
 
-In the experiment, the following open-source software versions were used.
+The following open-source software versions were used for our experiment:
 
 \begin{table}[ht]
   \caption{Software Versions}
@@ -93,9 +215,11 @@ In the experiment, the following open-source software versions were used.
   \label{tab:aksBenchmark}%
 \end{table}%
 
-Some of the versions above are likely superseded.
+Most of the versions above are likely superseded by the time of publication. Still, they were frozen at the start of this paper's preparation for consistency, given the rapid pace of development in artificial intelligence and Kubernetes (see \ref{velocity}).
 
 \subsection{MCP Server}
+
+A Kubernetes MCP server can significantly enhance security event analysis by providing access to all cluster metadata, including information about nodes, pods, and containers. This metadata can be very useful for enriching the security log data, making it easier to analyze.
 
 \begin{figure}[H]
 \centering
@@ -104,12 +228,52 @@ Some of the versions above are likely superseded.
 \label{fig:mcp-server}
 \end{figure}
 
+To aid the LLM in interpreting Neuvector signals, we added an open-source Kubernetes MCP server from the Containers repository with read-only access.\footnote{See \textit{Containers (2026)}: Welcome to Containers. \cite{whichMCP}}
+
+\begin{lstlisting}[caption=View Cluster Role, frame=single, basicstyle=\ttfamily, breaklines=true]
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/name: kubernetes-mcp-server
+    app.kubernetes.io/instance: mcp-server
+  name: mcp-server
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: view
+subjects:
+- kind: ServiceAccount
+  name: mcp-server
+  namespace: mcp-server
+  
+\end{lstlisting}
+
+\subsection{Final setup}
+
+The full setup with all components will then look like this in the management console:
+
+\begin{figure}[H]
+\centering
+\caption {Full Deployment}
+\includegraphics[width=0.9\linewidth]{images/neuvector-rancher.png}
+\label{fig:neuvector-rancher}
+\end{figure}
+
+All components are deployed as single-replica deployments, which is sufficient for an experiment or proof-of-concept, but should be changed to a high-availability configuration for production.
+
 \subsection{Air Gap}
 
-After training, model knowledge quickly becomes outdated.
+To support regulated industries, the entire setup can be deployed in an air-gapped environment without connection to the public internet.
 
-As discussed in \ref{threat-intelligence}, it's important to amend the model knowledge with current information.
+However, there are some caveats: After their initial training, model knowledge quickly becomes outdated, which might influence the accuracy of its decision-making.
 
-Another factor to consider is model bias.\footnote{See \textit{Xu, J. et al. (2026)}: AI self preference. \cite{xu2026}}
+As discussed in \ref{threat-intelligence}, it's important to augment the model's knowledge with current information, especially when the model itself cannot reach out to an updated CVE database or a list of current threat vectors.
+
+Another factor to consider for long-term usage is model bias.\footnote{See \textit{Xu, J. et al. (2026)}: AI self preference. \cite{xu2026}} If an offline model needs to be updated or replaced, it might disfavor previous decisions made by a different model.
 
 \subsection{GDPR}
+
+The setup itself does not generate any personally identifiable information and therefore should not fall under the GDPR. 
+
+In production, a detailed inspection of the event-stream data will be necessary to identify any PII collected from the application that may appear in the security events sent, and the system may need to be reclassified.
