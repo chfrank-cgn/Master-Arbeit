@@ -51,7 +51,7 @@ A schematic overview of the setup illustrates the flow of events through the ind
 \label{fig:event-stream}
 \end{figure}
 
-In what follows, we outline the selected components and the rationale for their selection.
+In the following paragraphs, we will outline the selected components for the setup and the rationale for their selection.
 
 \subsection{Syslog}
 
@@ -65,7 +65,7 @@ Both would have been equally good choices; in the end, the available destination
 
 In this setup, Syslog-ng runs a single-replica deployment and exposes the standard syslog TCP port 514 as a service, which we have configured in NeuVector above.
 
-\begin{lstlisting}[caption=Syslog Service definition, frame=single, basicstyle=\ttfamily, breaklines=true]
+\begin{lstlisting}[caption=Syslog Service definition, frame=single, basicstyle=\ttfamily\small, breaklines=true]
 apiVersion: v1
 kind: Service
 metadata:
@@ -91,7 +91,7 @@ In this setup, Mosquitto runs as a single replica deployment, exposing the stand
 
 To receive the event stream, we instruct syslog-ng to publish each individual signal to the topic qradar/neuvector of our broker:
 
-\begin{lstlisting}[caption=Destination d-mqtt, frame=single, basicstyle=\ttfamily, breaklines=true]
+\begin{lstlisting}[caption=Destination d-mqtt, frame=single, basicstyle=\ttfamily\small, breaklines=true]
 destination d_mqtt {
     mqtt(
     address("tcp://mosquitto:1883"),
@@ -122,7 +122,7 @@ In the light of this controversy, one could consider running llama.cpp directly 
 
 With the message broker and the API in place, we now need to integrate them. For this purpose, we will use a Python program that subscribes to the neuvector/qradar topic on our MQTT broker and forwards the message to Ollama.
 
-\begin{lstlisting}[caption=Event Bridge Excerpt, frame=single, basicstyle=\ttfamily, breaklines=true]
+\begin{lstlisting}[caption=Event Bridge Excerpt, frame=single, basicstyle=\ttfamily\small, breaklines=true, language=Python]
 from openai import OpenAI
 import paho.mqtt.client as paho
 
@@ -160,7 +160,7 @@ In our setup, we will use an Elasticsearch instance for long-term storage of sec
 
 Syslog-ng allows sending the events directly to Elasticsearch, with no post-processing needed.
 
-\begin{lstlisting}[caption=Destination d-elastic, frame=single, basicstyle=\ttfamily, breaklines=true]
+\begin{lstlisting}[caption=Destination d-elastic, frame=single, basicstyle=\ttfamily\small, breaklines=true]
 destination d_elastic {
     elasticsearch-http(
         index("neuvector"),
@@ -205,7 +205,7 @@ The following open-source software versions were used for our experiment:
     \hline
     NeuVector & 5.4.9 \\
     \hline
-    Ollama & 0.14.2 \\
+    Ollama & 0.14.2 -$>$ 0.23.2\footnote{See \textit{Attias, D. (2026)}: Bleeding Llama. \cite{bleedingLlama}} \\
     \hline
     Rancher & 2.12.3 \\
     \hline
@@ -230,7 +230,7 @@ A Kubernetes MCP server can significantly enhance security event analysis by pro
 
 To aid the LLM in interpreting Neuvector signals, we added an open-source Kubernetes MCP server from the Containers repository with read-only access.\footnote{See \textit{Containers (2026)}: Welcome to Containers. \cite{whichMCP}}
 
-\begin{lstlisting}[caption=View Cluster Role, frame=single, basicstyle=\ttfamily, breaklines=true]
+\begin{lstlisting}[caption=View Cluster Role, frame=single, basicstyle=\ttfamily\small, breaklines=true]
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -251,7 +251,7 @@ subjects:
 
 \subsection{Final setup}
 
-The full setup with all components will then look like this in the management console:
+The final setup with all components will then look like this in the management console:
 
 \begin{figure}[H]
 \centering
