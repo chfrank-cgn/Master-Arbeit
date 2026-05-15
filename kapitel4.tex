@@ -9,18 +9,65 @@
 
 \subsection{State of the art}
 
+It's a general sentiment in the industry that AI models are increasingly taking over specific cybersecurity tasks, not to replace human experts entirely but to handle repetitive, data-heavy, or time-sensitive work more efficiently. While AI excels at tasks such as log analysis, anomaly detection, and threat triage—where it can sift through vast datasets to identify patterns and flag suspicious activity—it still struggles with contextual judgment, strategic decision-making, and understanding nuanced attack vectors that require human intuition.\footnote{See \textit{Claburn, T. (2026)}: AI models replacing cybersecurity pros. \cite{aiSecurity}}
+
+AI can be particularly useful for automating mundane tasks, such as filtering false positives in alerts or patching known vulnerabilities, thereby freeing up time for more complex work, such as threat intelligence, incident response planning, or red teaming.
+
+As of the time of writing, AI's role is more that of augmenting rather than replacing cybersecurity teams. The most effective approach combines AI's speed and scalability with human expertise, ensuring that critical decisions, such as responding to a zero-day exploit, remain in human hands. For now, AI seems to be more of a force multiplier than a standalone option. We will explore this role in this chapter.
+
+In the next chapter, we will examine options to give the AI model greater leeway in decision-making.
+
+\subsection{Context Window}
+
+The main issue with context and memory in large language models is that they often struggle to maintain coherence and consistency over longer conversations or documents. LLMs are trained on large amounts of text data, but each piece of text is treated independently.
+
+So while an LLM can generate fluent and relevant responses to short prompts, it doesn't inherently retain memory of the full conversation context. This means that, as a conversation progresses, an LLM may lose track of key earlier details or even contradict itself. In our case, that would mean the LLM would lose the history of past events over time.
+
+An LLM can quickly interpret a single security signal; however, it may not know whether the same signal occurred last week. This is why the setup includes a data lake for long-term viewing and reporting.
+
+Researchers are working to improve LLMs' ability to handle long-term context and memory. \footnote{See \textit{Himansha, R. (2026)}: Claude's Long Context Window. \cite{claudeContext}} Some approaches include providing the model with a memory buffer that stores conversation history, fine-tuning the model on coherent long-form text to improve consistency, and experimenting with novel neural architectures that better track context. More memory alone will most likely not suffice to capture the context of a single security event fully.\footnote{See \textit{Martinez, S. (2026)}: More Memory Won’t Fix Your AI Agents. \cite{moreMemory}}
+
+\subsection{Model Selection}
+
+Earlier in this paper, we stated that we would start with the Gemma3 family of LLMs. Gemma3 is designed to be smaller and faster than models such as Llama 3 or Mistral, making it well-suited for resource-constrained environments, e.g., air-gapped systems in regulated environments. This efficiency is particularly useful for real-time log analysis and automated threat detection with low latency.\footnote{See \textit{Calloway, A. (2026)}: Gemma3 for IT Security. \cite{gemma3}}
+
+They also state that, with strong performance on structured tasks, Gemma3 will excel on text-based tasks. Gemma3 can parse and correlate logs to identify anomalies or indicators of compromise (IoCs) and create concise summaries of security events for SOC teams. If it's not completely air-gapped, it can extract key insights from threat reports or vulnerability databases.
+
+Gemma3 can thus also generate concise summaries of security events, which will be a key element of our setup.
+
+They also found that Gemma3's context window is smaller than that of models such as Llama 3 and Claude 3. This will affect its ability to analyze complex attack chains across multiple logs or over longer periods, but for now, we will stick with the Gemma3 family.
+
+To select a model from the Gemma3 family, we must consider the available hardware. For this paper, we use a Standard\_NC6s\_v3 system as the node on which Ollama will run. This system will provide an NVIDIA Tesla V100 GPU with 16GB of VRAM.\footnote{See \textit{Azure (2026)}: NCv3 size series. \cite{ncv3Series}}
+
+The Gemma3 family of models in the Ollama library comprises variants with different quantizations and memory requirements.\footnote{See \textit{Ollama (2026)}: Gemma3. \cite{modelsGemma3}}
+
+The gemma3:12b model with Q4\_K\_M quantization seems to be the largest member of the Gemma 3 family that will run fine on our system with the NVIDIA V100 GPU.\footnote{See \textit{Will It Run AI (2026)}: Gemma 3 12B. \cite{nvidiaV100}}
+
+Let's look at the model designation in detail:
+
+\begin{itemize}
+    \item 12B refers to the number of parameters in the model, in this case, 12 billion parameters 
+    \item Q stands for quantization, and 4 indicates 4-bit precision
+    \item K identifies the quantization method, k-means clustering or k-block quantization
+    \item M stands for "memory-efficient" or "mixed" quantization
+\end{itemize}
+
+Gemma3:12B with Q4\_K\_M quantization appears suitable as a lightweight LLM for security log analysis in clusters and is compatible with our hardware setup.
+
 \subsection{Incident Handling}
 
-\subsection{Enriching Events with Kubernetes data}
-
 \subsection{Using LLM for triage}
+
+\subsection{Enriching Events with Kubernetes data}
 
 \subsection{Using LLM for creating incidents}
 
 \subsection{Reporting}
 
+If the incident is critical and affects the availability of critical services, it will be reported to the BSI, using a NIS2-Compliant Incident Response Template.\footnote{See \textit{Calloway, A. (2026)}: Incident Response Plan Template. \cite{responsePlan}}
+
 \subsection{Types of required reports}
 
 \subsection{Using LLM for reporting}
 
-So far, everything has been read-only
+\subsection{Summary}

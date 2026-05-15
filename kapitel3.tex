@@ -59,7 +59,7 @@ Syslog-ng and rsyslog are the two most popular syslog server implementations for
 
 Syslog-ng is more feature-rich and flexible, with a powerful configuration language, built-in support for message parsing and reformatting, and the ability to store log messages in various databases. It also has a commercial version with additional features and support. 
 
-Rsyslog is lighter and faster, designed to efficiently handle large volumes of log messages. It has a simpler configuration language and relies on external plugins for advanced functionality. Rsyslog is fully open-source and free to use.
+Rsyslog is lighter and faster, designed to handle large volumes of log messages efficiently. It has a simpler configuration language and relies on external plugins for advanced functionality. Rsyslog is fully open-source and free to use.
 
 Both would have been equally good choices; in the end, the available destinations made syslog-ng the better fit.\footnote{See \textit{syslog-ng OSE (2026)}: syslog-ng destination options. \cite{ngDestinations}}
 
@@ -112,7 +112,7 @@ Then there is LM Studio, a GUI-based tool for downloading and running LLMs local
 
 Ollama is part of the SUSE AI stack and provides ready-made Kubernetes deployment files, making it an easy choice.\footnote {See \textit{SUSE (2026)}: SUSE AI Stack. \cite{suseAI}} Self-hosting, though, is not for everyone, even on Kubernetes.\footnote{See \textit{Davies, N. (2026)}: Self-Hosted LLMs in the Real World. \cite{selfHost}}
 
-Several factors should be considered when selecting a local model, which we will cover in the following chapters.\footnote{See \textit{Conway, A. (2026)}: A local LLM for coding. \cite{localModel}} For the setup, we will start with gemma3 as our model.
+Several factors should be considered when selecting a local model, which we will cover in the following chapters.\footnote{See \textit{Conway, A. (2026)}: A local LLM for coding. \cite{localModel}} For the setup, we will start with Gemma3 as our model.
 
 Ollama is currently embroiled in controversy over license compliance, attribution, and transparency regarding its use of the open-source project llama.cpp. Several voices argue that one should not continue to use Ollama, especially if one prioritizes transparency and performance.\footnote{See \textit{Zetaphor (2025)}: Friends don't let Friends use Ollama. \cite{ollamaDrama}}
 
@@ -154,7 +154,7 @@ We will examine possible immediate actions, such as creating an incident, in the
 
 \subsection{Elasticsearch}
 
-Elasticsearch has long been the gold standard for log file storage and analysis in IT. While there are many alternatives, such as Grafana Loki or Splunk, many IT operations rely on Elasticsearch or its forked cousin, OpenSearch.
+Elasticsearch has long been the gold standard for log file storage and analysis in IT.\footnote{See \textit{Elastic (2026)}: Elastic recognized as a Leader. \cite{gartnerElastic}} While there are many alternatives, such as Grafana Loki or Splunk, many IT operations rely on Elasticsearch or its forked cousin, OpenSearch.
 
 In our setup, we will use an Elasticsearch instance for long-term storage of security events and for forensic analysis.
 
