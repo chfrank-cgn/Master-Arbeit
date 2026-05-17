@@ -59,7 +59,7 @@ Syslog-ng and rsyslog are the two most popular syslog server implementations for
 
 Syslog-ng is more feature-rich and flexible, with a powerful configuration language, built-in support for message parsing and reformatting, and the ability to store log messages in various databases. It also has a commercial version with additional features and support. 
 
-Rsyslog is lighter and faster, designed to handle large volumes of log messages efficiently. It has a simpler configuration language and relies on external plugins for advanced functionality. Rsyslog is fully open-source and free to use.
+Rsyslog is lighter and faster, designed to efficiently handle large volumes of log messages. It has a simpler configuration language and relies on external plugins for advanced functionality. Rsyslog is fully open-source and free to use.
 
 Both would have been equally good choices; in the end, the available destinations made syslog-ng the better fit.\footnote{See \textit{syslog-ng OSE (2026)}: syslog-ng destination options. \cite{ngDestinations}}
 
@@ -185,41 +185,9 @@ In addition to the ability to immediately respond to security events via the bri
 
 In the following chapters, we will explore options, such as comprehensive reporting on security events, for using this data to fulfill obligations under NIS2.
 
-\subsection{Software Versions}
-
-The following open-source software versions were used for our experiment:
-
-\begin{table}[ht]
-  \caption{Software Versions}
-    \begin{tabular}{| l | l |}
-    \hline
-    Software & Version \\
-    \hline\hline
-    Elasticsearch & 8.19.3 \\
-    \hline
-    Kubernetes (AKS) & 1.33.8 \\
-    \hline
-    MCP-Server & 0.0.60 \\
-    \hline
-    Mosquitto & 2.0.22 \\
-    \hline
-    NeuVector & 5.4.9 \\
-    \hline
-    Ollama & 0.14.2 -$>$ 0.23.2\footnote{See \textit{Attias, D. (2026)}: Bleeding Llama. \cite{bleedingLlama}} \\
-    \hline
-    Rancher & 2.12.3 \\
-    \hline
-    Syslog-ng & 4.10.2 \\
-    \hline
-    \end{tabular}%
-  \label{tab:aksBenchmark}%
-\end{table}%
-
-Most of the versions above are likely superseded by the time of publication. Still, they were frozen at the start of this paper's preparation for consistency, given the rapid pace of development in artificial intelligence and Kubernetes (see \ref{velocity}).
-
 \subsection{MCP Server}
 
-A Kubernetes MCP server can significantly enhance security event analysis by providing access to all cluster metadata, including information about nodes, pods, and containers. This metadata can be very useful for enriching the security log data, making it easier to analyze.
+As a companion to our LLM, we can run an MCP Server. A Kubernetes MCP server can significantly enhance security event analysis by providing the LLM with access to all cluster metadata, including information about nodes, pods, and containers. This metadata can be very useful for enriching the security log data, making it easier to analyze.
 
 \begin{figure}[H]
 \centering
@@ -270,10 +238,42 @@ However, there are some caveats: After their initial training, model knowledge q
 
 As discussed in \ref{threat-intelligence}, it's important to augment the model's knowledge with current information, especially when the model itself cannot reach out to an updated CVE database or a list of current threat vectors.
 
-Another factor to consider for long-term usage is model bias.\footnote{See \textit{Xu, J. et al. (2026)}: AI self preference. \cite{xu2026}} If an offline model needs to be updated or replaced, it might disfavor previous decisions made by a different model.
+Another factor to consider for long-term usage is model bias.\footnote{See \textit{Xu, J. et al. (2026)}: AI self preference. \cite{xu2026}} If an offline model needs to be updated or replaced, it might disfavor previous decisions or analyses made by a different model.
 
 \subsection{GDPR}
 
 The setup itself does not generate any personally identifiable information and therefore should not fall under the GDPR. 
 
 In production, a detailed inspection of the event-stream data will be necessary to identify any PII collected from the application that may appear in the security events sent, and the system may need to be reclassified.
+
+\subsection{Software Versions}
+
+The following open-source software versions are used for our experiment:
+
+\begin{table}[ht]
+  \caption{Software Versions}
+    \begin{tabular}{| l | l |}
+    \hline
+    Software & Version \\
+    \hline\hline
+    Elasticsearch & 8.19.3 \\
+    \hline
+    Kubernetes (AKS) & 1.33.8 \\
+    \hline
+    MCP-Server & 0.0.60 \\
+    \hline
+    Mosquitto & 2.0.22 \\
+    \hline
+    NeuVector & 5.4.9 \\
+    \hline
+    Ollama & 0.14.2 -$>$ 0.23.2\footnote{See \textit{Attias, D. (2026)}: Bleeding Llama. \cite{bleedingLlama}} \\
+    \hline
+    Rancher & 2.12.3 \\
+    \hline
+    Syslog-ng & 4.10.2 \\
+    \hline
+    \end{tabular}%
+  \label{tab:aksBenchmark}%
+\end{table}%
+
+Most of the versions above are likely superseded by the time of publication. Still, they were frozen at the start of this paper's preparation for consistency, given the rapid pace of development in artificial intelligence and Kubernetes (see \ref{velocity}).

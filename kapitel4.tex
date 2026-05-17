@@ -56,6 +56,20 @@ Gemma3:12B with Q4\_K\_M quantization appears suitable as a lightweight LLM for 
 
 \subsection{Incident Handling}
 
+Our security signals are available in the message broker queue and the long-term data lake.
+
+Let's start analyzing an event. First, we will provide the LLM an introductory system prompt through our bridge:
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+        You are a helpful Kubernetes security expert.
+        
+        You shall reply concisely.
+    }
+}
+
+Then we will add more text.
+
 \subsection{Using LLM for triage}
 
 \subsection{Enriching Events with Kubernetes data}
@@ -72,7 +86,8 @@ If the incident is critical and affects the availability of critical services, i
 
 \subsection{Adding LLM to long-term data storage}
 
-Connect to a local LLM for Elastic Security using LM Studio
+Connect to a local LLM for Elastic Security using LM Studio.
+
 https://www.elastic.co/docs/explore-analyze/ai-features/llm-guides/connect-to-lmstudio-security
 
 \subsection{Summary}
