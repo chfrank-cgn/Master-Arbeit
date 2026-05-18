@@ -25,7 +25,7 @@ So while an LLM can generate fluent and relevant responses to short prompts, it 
 
 An LLM can quickly interpret a single security signal; however, it may not know whether the same signal occurred last week. This is why the setup includes a data lake for long-term viewing and reporting.
 
-Researchers are working to improve LLMs' ability to handle long-term context and memory. \footnote{See \textit{Himansha, R. (2026)}: Claude's Long Context Window. \cite{claudeContext}} Some approaches include providing the model with a memory buffer that stores conversation history, fine-tuning the model on coherent long-form text to improve consistency, and experimenting with novel neural architectures that better track context. More memory alone will most likely not suffice to capture the context of a single security event fully.\footnote{See \textit{Martinez, S. (2026)}: More Memory Won’t Fix Your AI Agents. \cite{moreMemory}}
+Researchers are working to improve LLMs' ability to handle long-term context and memory. \footnote{See \textit{Himansha, R. (2026)}: Claude's Long Context Window. \cite{claudeContext}} Some approaches include providing the model with a memory buffer that stores conversation history, fine-tuning the model on coherent long-form text to improve consistency, and experimenting with novel neural architectures that better track context. More memory alone will most likely not suffice to fully capture the context of a single security event.\footnote{See \textit{Martinez, S. (2026)}: More Memory Won’t Fix Your AI Agents. \cite{moreMemory}}
 
 \subsection{Model Selection}
 
@@ -58,13 +58,19 @@ Gemma3:12B with Q4\_K\_M quantization appears suitable as a lightweight LLM for 
 
 Our security signals are available in the message broker queue and the long-term data lake.
 
-Let's start analyzing an event. First, we will provide the LLM an introductory system prompt through our bridge:
+Let's start analyzing an event. First, we will provide the LLM an introductory system prompt through our bridge:\footnote{See \textit{Khalesi, B. (2026)}: I finally left ChatGPT for Gemini. \cite{toGemini}}
 
 \indent\colorbox{codegrey}{
     \parbox{0.8\linewidth}{
         You are a helpful Kubernetes security expert.
         
-        You shall reply concisely.
+        Reply concisely.
+
+        Don't over-explain basic answers.
+        
+        Use direct language.
+        
+        Preserve technical formatting.
     }
 }
 
