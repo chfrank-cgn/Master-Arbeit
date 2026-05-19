@@ -196,7 +196,9 @@ As a companion to our LLM, we can run an MCP Server. A Kubernetes MCP server can
 \label{fig:mcp-server}
 \end{figure}
 
-To aid the LLM in interpreting Neuvector signals, we added an open-source Kubernetes MCP server from the Containers repository with read-only access.\footnote{See \textit{Containers (2026)}: Welcome to Containers. \cite{whichMCP}}
+To aid the LLM in interpreting Neuvector signals, we added an open-source Kubernetes MCP server from the Containers repository with read-only access, using Kubernetes' Role-Based Access Control.\footnote{See \textit{Containers (2026)}: Welcome to Containers. \cite{whichMCP}} RBAC is a security mechanism that regulates access to resources based on the roles assigned to users, groups, or service accounts.\footnote{\textit{Ferraiolo, D. et.al. (2007)}: Role-Based Access Control. \cite{rbac}}
+
+RBAC in Kubernetes allows administrators to define granular permissions by creating Roles and ClusterRoles that specify which actions (e.g., get, create, delete) are allowed on which resources (e.g., pods, deployments, secrets). These roles are then bound to users or service accounts via RoleBindings (namespace-scoped) or ClusterRoleBindings (cluster-wide):
 
 \begin{lstlisting}[caption=Cluster Role definition, frame=single, basicstyle=\ttfamily\small, breaklines=true]
 apiVersion: rbac.authorization.k8s.io/v1
