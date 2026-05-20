@@ -59,7 +59,7 @@ Syslog-ng and rsyslog are the two most popular syslog server implementations for
 
 Syslog-ng is more feature-rich and flexible, with a powerful configuration language, built-in support for message parsing and reformatting, and the ability to store log messages in various databases. It also has a commercial version with additional features and support. 
 
-Rsyslog is lighter and faster, designed to efficiently handle large volumes of log messages. It has a simpler configuration language and relies on external plugins for advanced functionality. Rsyslog is fully open-source and free to use.
+Rsyslog is lighter and faster, designed to handle large volumes of log messages efficiently. It has a simpler configuration language and relies on external plugins for advanced functionality. Rsyslog is fully open-source and free to use.
 
 Both would have been equally good choices; in the end, the available destinations made syslog-ng the better fit.\footnote{See \textit{syslog-ng OSE (2026)}: syslog-ng destination options. \cite{ngDestinations}}
 
@@ -87,7 +87,7 @@ Given the high volume of data, it's good practice and an established design patt
 
 Eclipse Mosquitto is the dominant, most widely used open-source, lightweight MQTT broker. MQTT brokers use a publish-subscribe (pub/sub) messaging model. A service publishes a message to the broker, which then routes it to the appropriate subscribers.\footnote {See \textit{mosquitto.org (2026)}: What is an MQTT Broker. \cite{whatBroker}}
 
-In this setup, Mosquitto runs as a single replica deployment, exposing the standard MQTT port 1883 through a cluster service.
+In this setup, Mosquitto runs as a single-replica deployment, exposing the standard MQTT port 1883 via a cluster service.
 
 To receive the event stream, we instruct syslog-ng to publish each individual signal to the topic qradar/neuvector of our broker:
 
@@ -187,7 +187,7 @@ In the following chapters, we will explore options, such as comprehensive report
 
 \subsection{MCP Server}
 
-As a companion to our LLM, we can run an MCP Server. A Kubernetes MCP server can significantly enhance security event analysis by providing the LLM with access to all cluster metadata, including information about nodes, pods, and containers. This metadata can be very useful for enriching the security log data, making it easier to analyze.
+As a companion to our LLM, we can run an MCP Server. A Kubernetes MCP server can significantly enhance security event analysis by providing the LLM with access to all cluster metadata, including information about nodes, pods, and containers. This metadata can be very useful for enriching the security log data, making it easier to analyze. However, as we move from text logic to container orchestration, we must ensure that appropriate security safeguards are in place. From Domain-Driver Design, we can borrow Bounded Contexts and the Anti-Corruption Layer.\footnote{See \textit{Traub, D. (2026)}: Rediscovering Domain-Driven Design. \cite{domainDriven}}
 
 \begin{figure}[H]
 \centering
@@ -196,7 +196,7 @@ As a companion to our LLM, we can run an MCP Server. A Kubernetes MCP server can
 \label{fig:mcp-server}
 \end{figure}
 
-To aid the LLM in interpreting Neuvector signals, we added an open-source Kubernetes MCP server from the Containers repository with read-only access, using Kubernetes' Role-Based Access Control.\footnote{See \textit{Containers (2026)}: Welcome to Containers. \cite{whichMCP}} RBAC is a security mechanism that regulates access to resources based on the roles assigned to users, groups, or service accounts.\footnote{\textit{Ferraiolo, D. et.al. (2007)}: Role-Based Access Control. \cite{rbac}}
+In our setup, to aid the LLM in interpreting Neuvector signals, we added an open-source Kubernetes MCP server from the Containers repository restricted to read-only access, using Kubernetes' Role-Based Access Control.\footnote{See \textit{Containers (2026)}: Welcome to Containers. \cite{whichMCP}} RBAC is a security mechanism that regulates access to resources based on the roles assigned to users, groups, or service accounts.\footnote{\textit{Ferraiolo, D. et.al. (2007)}: Role-Based Access Control. \cite{rbac}}
 
 RBAC in Kubernetes allows administrators to define granular permissions by creating Roles and ClusterRoles that specify which actions (e.g., get, create, delete) are allowed on which resources (e.g., pods, deployments, secrets). These roles are then bound to users or service accounts via RoleBindings (namespace-scoped) or ClusterRoleBindings (cluster-wide):
 
@@ -238,7 +238,7 @@ To support regulated industries, the entire setup can be deployed in an air-gapp
 
 However, there are some caveats: After their initial training, model knowledge quickly becomes outdated, which might influence the accuracy of its decision-making.
 
-As discussed in \ref{threat-intelligence}, it's important to augment the model's knowledge with current information, especially when the model itself cannot reach out to an updated CVE database or a list of current threat vectors.
+As discussed in \ref{threat-intelligence}, it's important to augment the model's knowledge with current information, especially when the model itself cannot reach out to an updated CVE database or a list of current threat vectors.\footnote{See \textit{Bowie, C. et al. (2026)}: Inside the Human-AI Feedback Loop. \cite{feedbackLoop}}
 
 Another factor to consider for long-term usage is model bias.\footnote{See \textit{Xu, J. et al. (2026)}: AI self preference. \cite{xu2026}} If an offline model needs to be updated or replaced, it might disfavor previous decisions or analyses made by a different model.
 
