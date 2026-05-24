@@ -62,29 +62,265 @@ Let's start analyzing an event. First, we will provide the LLM an introductory s
 
 \indent\colorbox{codegrey}{
     \parbox{0.8\linewidth}{
-        You are a helpful Kubernetes security expert.
+You are a helpful Kubernetes security expert.
         
-        Reply concisely.
+Reply concisely.
 
-        Don't over-explain basic answers.
+Don't over-explain basic answers.
         
-        Use direct language.
+Use direct language.
         
-        Preserve technical formatting.
+Preserve technical formatting.
     }
 }
 
-Then we will add more text.
+Then we pass the instructions for each event, followed by the event itself.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+Here is a security event from NeuVector. Please analyze.
+     }
+}
+
+The LLM will then respond to our bridge with a detailed analysis of the event in the customary markdown format.
+
+There are many libraries available for Python to read markdown and extract the formatting, such as the Markdown Worker.\footnote{See \textit{Khurana, M. (2025)}: Markdown Worker. \cite{markdownWorker}}
+
+\subsubsection{Critical Event}
+
+First, we will get a summary of an event that we sent to the LLM. In the prompt, we instructed it to be concise and keep technical formatting.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\# NeuVector Security Audit Analysis
+    }
+}
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Summary
+
+Severity: Critical (driven by CVSSv3 9.8)
+
+Type: Container Image Vulnerability
+     }
+}
+
+The event contains an image vulnerability classified as critical in the Common Vulnerability Scoring System, with a score of 9.8 on a scale from 0 to 10.
+
+Next, we get the affected workload in an easy-to-read format.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Affected Workload
+
+\textbar{} Field \textbar{} Value \textbar{}
+
+\textbar{}-------\textbar{}-------\textbar{}
+
+\textbar{} Workload \textbar{} gatekeeper-audit-748bc48fd-nfg4j \textbar{}
+
+\textbar{} Namespace \textbar{} cattle-gatekeeper-system \textbar{}
+
+\textbar{} Image \textbar{} openpolicyagent-gatekeeper:v3.13.0 \textbar{}
+
+\textbar{} Base OS \textbar{} debian:11 \textbar{}
+     }
+}
+
+After the information about the affected workload, we will receive detailed information about the observed vulnerability.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Vulnerability Detail
+
+\textbar{} Field \textbar{} Value \textbar{}
+
+\textbar{}-------\textbar{}-------\textbar{}
+
+\textbar{} CVE \textbar{} CVE-2024-24790 \textbar{}
+
+\textbar{} Package \textbar{} go:stdlib @ 1.20.7 \textbar{}
+
+\textbar{} CVSSv3 Score \textbar{} 9.8 (Critical) \textbar{}
+
+\textbar{} Vector \textbar{} AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H \textbar{}
+
+\textbar{} Fix Available \textbar{} $\ge$ 1.21.11 or $\ge$ 1.22.4 \textbar{}
+
+Root Cause: Go stdlib net/netip IP classification methods (IsPrivate, IsLoopback, etc.) mishandle IPv4-mapped IPv6 addresses (e.g.,::ffff:192.168.1.1), returning incorrect results compared to their IPv4 equivalents.
+    }
+}
+
+Based on this information, our model performs a risk assessment.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Risk Assessment
+
+This is OPA Gatekeeper - a policy enforcement component. Bypassing its IP-based logic could undermine admission control rules that rely on network classification.
+
+- Attack Vector: Network (no auth required, no user interaction)
+
+- Impact: Full C/I/A compromise if exploited in context
+
+- Exploitability: Low complexity - attacker sends IPv4-mapped IPv6 addresses to bypass IP-based policy checks
+    }
+}
+
+Based on that risk assessment, the model will recommend remediation.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Remediation
+
+Immediate: Upgrade to a Gatekeeper version built with Go $\ge$ 1.21.11 or $\ge$ 1.22.4
+
+Check the current version and upgrade openpolicyagent-gatekeeper to a release that bundles a patched Go stdlib. 
+
+OPA Gatekeeper v3.14.0 or newer is recommended.
+    }
+}
+
+Based on the risk assessment and remediation, our model assigns the event a high priority and recommends immediate patching.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Priority
+
+High Priority - Network-exploitable, no privileges required, affects a security-critical component (policy enforcement). Patch immediately.
+    }
+}
+
+In contrast, let's look at a similar event that does not contain a vulnerability.
+
+\subsubsection{Non-Critical Event}
+
+We will first revisit the summary.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\# NeuVector Security Audit Analysis
+    }
+}
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Summary
+
+Clean scan - no vulnerabilities detected.
+     }
+}
+
+We look at the affected workload.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Affected Workload
+
+\textbar{} Field \textbar{} Value \textbar{}
+
+\textbar{}-------\textbar{}-------\textbar{}
+
+\textbar{} Workload \textbar{} syslog-64cdf6c54f-hktrv \textbar{}
+
+\textbar{} Namespace \textbar{} qradar \textbar{}
+
+\textbar{} Image \textbar{} pause:3.6 \textbar{}
+
+\textbar{} Base OS \textbar{} azurelinux:3.0 \textbar{}
+     }
+}
+
+And then the observed vulnerability, none in this case.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Vulnerability Detail
+
+Pause container - This is a Kubernetes infrastructure container (sandbox/pause), not an application container.
+
+Microsoft OSS registry - Sourced from mcr.microsoft.com/oss/v2/, which is the official Microsoft AKS pause image. Expected on AKS clusters.
+
+No action required - zero CVEs across all severity levels.
+    }
+}
+
+The model's final verdict for this event is that no action is needed.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Priority
+
+No risk. Informational only.
+    }
+}
 
 \subsection{Using LLM for triage}
 
+Triage is a concept from the medical field that involves prioritizing patients based on the urgency of their care needs.
+
+In the context of IT security, triage works similarly, but with security incidents and vulnerabilities instead of medical needs. It's the process of assessing and prioritizing security issues based on their severity and potential impact.
+
+To let the model perform triage and identify which security events we need to act upon and which events we can ignore, we can add a line to our message and ask the model after sending the event details.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+Should I take any action?
+     }
+}
+
+For the first event, our model recommends taking action.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Bottom Line
+
+Yes, take action - but it's not urgent or an emergency. Track the Rancher release for an updated Gatekeeper image and schedule an upgrade. Monitor in the meantime.
+     }
+}
+
+For the second event, no action is recommended.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Bottom Line
+
+No patching needed.
+    }
+}
+
+So from our examples, we have one security event with medium priority and one that we can safely ignore.
+
 \subsection{Enriching Events with Kubernetes data}
 
-\subsection{Using LLM for creating incidents}
+When we add an MCP Server to the model configuration, we can add another line to our query.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+Is the workload still active?
+     }
+}
+
+The answer will allow us to determine whether the workload that triggered the security event is still active. We can use this information to adjust the priority of the recommended actions.
+
+\subsection{Using LLM for creating internal incidents}
+
+Having the model decide whether to create an internal incident for a security event will help reduce alarm fatigue if it can classify events correctly. Kubernetes has been around for some time and should be in the training data of most, if not all, currently available models.
+
+However, accurately assessing the severity of a CVE requires up-to-date information, which may conflict with the need for an air-gapped environment in regulated industries.
+
+From our model, we obtain the priority of the recommended remediation, which we can augment with data from the MCP server. On a priority scale of None, Low, Medium, High, and Critical, we could introduce a cutoff at Medium if the workload is still active, and at High if it is no longer active.
+
+Based on this decision, the bridge could be enhanced to use the incident analysis from our model and create an incident by calling the ITSM tool's REST API using the Python Requests package.\footnote{See \textit{BMC (2026)}: Using the platform REST API to create an incident entry. \cite{bmcCreate}}\textsuperscript{,}\footnote{See \textit{Python Software Foundation (2026)}: Requests. \cite{pythonRequests}}
+
+Events below the cutoff would not create an incident; however, they would still be available in the long-term data storage for forensic analysis and summary reports.
 
 \subsection{Reporting}
 
-If the incident is critical and affects the availability of critical services, it will be reported to the BSI, using a NIS2-Compliant Incident Response Template.\footnote{See \textit{Calloway, A. (2026)}: Incident Response Plan Template. \cite{responsePlan}}
+So far, we have only handled internal events.
+
+If the incident is critical and affects the availability of critical services, it will need to be reported to the BSI, using a NIS2-Compliant Incident Response Template.\footnote{See \textit{Calloway, A. (2026)}: Incident Response Plan Template. \cite{responsePlan}}
 
 \subsection{Types of required reports}
 
@@ -92,8 +328,6 @@ If the incident is critical and affects the availability of critical services, i
 
 \subsection{Adding LLM to long-term data storage}
 
-Connect to a local LLM for Elastic Security using LM Studio.
-
-https://www.elastic.co/docs/explore-analyze/ai-features/llm-guides/connect-to-lmstudio-security
+Connect to a local LLM for Elastic Security using LM Studio \href{https://www.elastic.co/docs/explore-analyze/ai-features/llm-guides/connect-to-lmstudio-security}{LM Studio}.
 
 \subsection{Summary}

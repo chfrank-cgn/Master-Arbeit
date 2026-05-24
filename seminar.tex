@@ -1,13 +1,18 @@
 %
 % Angepasste FOM Seminarvorlage
 %
+\RequirePackage{silence}
+ \WarningFilter{latexfont}{Some font shapes were}
+
 \documentclass[12pt,a4paper,listof=totoc,bibliography=totoc]{scrartcl}
 
 \usepackage[english]{babel}			% englische Namen/Umlaute
 \usepackage[utf8]{inputenc}	    	% Zeichensatzkodierung
+\usepackage{lmodern}
 \usepackage{silence}
  \WarningFilter{scrartcl}{Usage of package `fancyhdr'}
  \WarningFilter{scrartcl}{Usage of package `parskip'}
+ \WarningFilter{latexfont}{Font shape `}
 \usepackage{fancyhdr}
 \usepackage{graphicx}               % Einbinden von Bildern
 \usepackage[hidelinks]{hyperref}	% Klickbare Verweise und \autoref{label}
