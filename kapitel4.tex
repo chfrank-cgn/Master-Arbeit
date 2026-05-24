@@ -13,7 +13,7 @@ It's a general sentiment in the industry that AI models are increasingly taking 
 
 AI can be particularly useful for automating mundane tasks, such as filtering false positives in alerts or patching known vulnerabilities, thereby freeing up time for more complex work, such as threat intelligence, incident response planning, or red teaming.
 
-As of the time of writing, AI's role is more that of augmenting rather than replacing cybersecurity teams. The most effective approach combines AI's speed and scalability with human expertise, ensuring that critical decisions, such as responding to a zero-day exploit, remain in human hands. For now, AI seems to be more of a force multiplier than a standalone option. We will explore this role in this chapter.
+As of the time of writing, AI's role is more that of augmentation rather than replacement for cybersecurity teams. The most effective approach combines AI's speed and scalability with human expertise, ensuring that critical decisions, such as responding to a zero-day exploit, remain in human hands. For now, AI seems to be more of a force multiplier than a standalone option. We will explore this role in this chapter.
 
 In the next chapter, we will examine options to give the AI model greater leeway in decision-making.
 
@@ -25,7 +25,7 @@ So while an LLM can generate fluent and relevant responses to short prompts, it 
 
 An LLM can quickly interpret a single security signal; however, it may not know whether the same signal occurred last week. This is why the setup includes a data lake for long-term viewing and reporting.
 
-Researchers are working to improve LLMs' ability to handle long-term context and memory. \footnote{See \textit{Himansha, R. (2026)}: Claude's Long Context Window. \cite{claudeContext}} Some approaches include providing the model with a memory buffer that stores conversation history, fine-tuning the model on coherent long-form text to improve consistency, and experimenting with novel neural architectures that better track context. More memory alone will most likely not suffice to fully capture the context of a single security event.\footnote{See \textit{Martinez, S. (2026)}: More Memory Won’t Fix Your AI Agents. \cite{moreMemory}}
+Researchers are working to improve LLMs' ability to handle long-term context and memory. \footnote{See \textit{Himansha, R. (2026)}: Claude's Long Context Window. \cite{claudeContext}} Some approaches include providing the model with a memory buffer that stores conversation history, fine-tuning the model on coherent long-form text to improve consistency, and experimenting with novel neural architectures that better track context. More memory alone will most likely not suffice to capture the context of a single security event fully.\footnote{See \textit{Martinez, S. (2026)}: More Memory Won’t Fix Your AI Agents. \cite{moreMemory}}
 
 \subsection{Model Selection}
 

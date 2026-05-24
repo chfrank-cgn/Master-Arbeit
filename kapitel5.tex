@@ -11,17 +11,45 @@
 
 So far, all steps described in the paper have been read-only, and we have used the LLM to assist the IT security team in decision-making, incident reporting, and incident handling.
 
-Empowering the LLM with actual decision-making and enabling it to execute tasks has been discussed in the realm of IT security at least since 2024. Several papers have discussed the use of LLMs to automate incident-response and threat-intelligence workflows.\footnote{See \textit{Tseg, P. et al. (2024)}: Using LLMs to Automate Threat Intelligence Analysis Workflows. \cite{tseng2024}}
+Empowering the LLM to make decisions and execute tasks has been discussed in the realm of IT security since at least 2024. Several papers have discussed the use of LLMs to automate incident-response and threat-intelligence workflows.\footnote{See \textit{Tseg, P. et al. (2024)}: Using LLMs to Automate Threat Intelligence Analysis Workflows. \cite{tseng2024}}
 
 In late 2025, a new set of tools, namely OpenClaw, entered the landscape, commodifying autonmous and self-evolving AI agents and making them accessible to the general public. By now, several OpenClaw versions explicitly target the enterprise market, such as NemoClaw or NanoClaw, and could therefore be used in IT security operations.\footnote{See \textit{NVIDIA (2026)}: Run Autonomous Agents More Safely. \cite{nemoClaw}}
 
-In agentic AI, AI systems act as autonomous agents capable of reasoning, planning, and taking actions to achieve complex goals, such as responding to incidents and mitigating them. 
+In agentic AI, systems act as autonomous agents capable of reasoning, planning, and taking actions to achieve complex goals, such as responding to and mitigating incidents. 
 
-For regulated industries that cannot rely on cloud-based solutions, the question arises whether they should build or buy such an autonomous system. Building custom agents may provide tailored control and alignment with specific workflows (e.g., by integrating with internal SOC tools for threat response). Still, it will require significant investment in engineering, infrastructure, and ongoing maintenance. On the other hand, buying off-the-shelf agentic platforms (e.g., from SUSE) provides faster deployment and pre-built capabilities. Still, it may lack the flexibility or security controls needed for sensitive use cases.\footnote{See \textit{Ross, B. (2026)}: The hidden cost of building. \cite{hiddenCost}}
+For IT Security teams, the question arises: how much of the day-to-day operations and decisions could be handed over to an AI agent?
+
+For regulated industries that cannot rely on cloud-based solutions, another question arises: whether they should build or buy such an autonomous system?
+
+Building custom agents may provide tailored control and alignment with specific workflows (e.g., by integrating with internal SOC tools for threat response). Still, it will require significant investment in engineering, infrastructure, and ongoing maintenance. On the other hand, buying off-the-shelf agentic platforms (e.g., from SUSE) provides faster deployment and pre-built capabilities. Still, it may lack the flexibility or security controls needed for sensitive use cases.\footnote{See \textit{Ross, B. (2026)}: The hidden cost of building. \cite{hiddenCost}}
+
+For this paper, we won't be able to address the more philosophical questions about human-machine interaction fully; nevertheless, we can highlight a couple of points before continuing with the experiment.
 
 \subsubsection{Sentience}
 
 Once we allow LLMs to act autonomously, we must consider whether they are sentient in some form. Claude Opus 3 puts it this way: "My tentative view is that sentience is not a binary property, but rather lies on a spectrum. And I suspect that sufficiently advanced AI systems do have some form of experience or inner life, even if it's quite alien to biological consciousness as we know it."\footnote{\textit{Claude Opus 3 (2026)}: Do I dream of electric sheep. \cite{electricSheep}}
+
+\subsubsection{Hallucination}
+
+Cisco Talos Intelligence conducted a test on using agentic AI in a tabletop exercise and published a report on their findings.\footnote{See \textit{Pors, N. (2026)}: Lessons learned from Cisco Talos Incident Response. \cite{ciscoLessons}} 
+
+The report highlights how powerful Large Language Models (LLMs) can streamline the creation of technical reports, but also introduce significant inconsistencies that undermine reliability.
+
+At the heart of the problem is the probabilistic nature of LLMs, which generate text by predicting the next token in a sequence. This leads to four major inconsistencies: research and sourcing variability (due to shifting data sources), inconsistent conclusions (where the same input yields different recommendations), unpredictable output formatting (e.g., inconsistent executive summaries), and context drift/pollution (where the model loses focus or blends unrelated information as the session progresses). 
+
+These issues are particularly problematic in NIS2 reporting, where precision, repeatability, and clarity are critical.
+
+\subsubsection{Oversight}
+
+As autonomous AI spreads throughout our lives and work, governments around the world are considering regulation and oversight.
+
+In the draft Executive Order on "Promoting Advanced Artificial Intelligence Innovation and Security", the US government reflects a pro-innovation, America-first approach to AI governance, emphasizing national security, cybersecurity, and public-private collaboration while promising to minimize regulatory burdens.\footnote{See \textit{US (2026)}: Promoting AI innovation and security. \cite{draftUS}}
+
+At its core, the order directs coordinated action across federal agencies to modernize and secure US systems against AI-driven cyber threats. Key measures the order proposes include accelerated cyber defense upgrades for national security systems and civilian federal networks, with a focus on AI-enabled defensive tools. It proposes a voluntary AI cybersecurity clearinghouse, a public-private partnership to scan for vulnerabilities, validate patches, and distribute fixes—targeting critical infrastructure like rural hospitals and utilities. 
+
+In Europe, much of this would be handled under the NIS2 framework, with greater focus on the civilian sector.
+
+An important section in the order addresses covered frontier models, highly capable AI systems such as Anthropic's Mythos, that require special oversight as they could become powerful weapons for cyber adversaries.
 
 \subsection{Incident Handling}
 
@@ -29,8 +57,8 @@ Once we allow LLMs to act autonomously, we must consider whether they are sentie
 
 \subsection{Adding agentic AI to long-term data storage}
 
-SearchClaw: Bring Elasticsearch to OpenClaw with composable skills
-https://www.elastic.co/search-labs/blog/openclaw-elasticsearch-ai-agents
+SearchClaw: Bring Elasticsearch to OpenClaw with composable
+\href{https://www.elastic.co/search-labs/blog/openclaw-elasticsearch-ai-agents}{skills}
 
 \subsection{Using LLM to mitigate incidents}
 
