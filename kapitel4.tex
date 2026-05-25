@@ -25,7 +25,7 @@ So while an LLM can generate fluent and relevant responses to short prompts, it 
 
 An LLM can quickly interpret a single security signal; however, it may not know whether the same signal occurred last week. This is why the setup includes a data lake for long-term viewing and reporting.
 
-Researchers are working to improve LLMs' ability to handle long-term context and memory. \footnote{See \textit{Himansha, R. (2026)}: Claude's Long Context Window. \cite{claudeContext}} Some approaches include providing the model with a memory buffer that stores conversation history, fine-tuning the model on coherent long-form text to improve consistency, and experimenting with novel neural architectures that better track context. More memory alone will most likely not suffice to capture the context of a single security event fully.\footnote{See \textit{Martinez, S. (2026)}: More Memory Won’t Fix Your AI Agents. \cite{moreMemory}}
+Researchers are working to improve LLMs' ability to handle long-term context and memory. \footnote{See \textit{Himansha, R. (2026)}: Claude's Long Context Window. \cite{claudeContext}} Some approaches include providing the model with a memory buffer that stores conversation history, fine-tuning the model on coherent long-form text to improve consistency, and experimenting with novel neural architectures that better track context. More memory alone will most likely not be sufficient to fully capture the context of a single security event.\footnote{See \textit{Martinez, S. (2026)}: More Memory Won’t Fix Your AI Agents. \cite{moreMemory}}
 
 \subsection{Model Selection}
 
@@ -53,6 +53,8 @@ Let's look at the model designation in detail:
 \end{itemize}
 
 Gemma3:12B with Q4\_K\_M quantization appears suitable as a lightweight LLM for security log analysis in clusters and is compatible with our hardware setup. It will, however, not perform at the level of Anthropic's Mythos.\footnote{See \textit{Ahmad, M. (2026)}: Mythos AI is a cybersecurity threat. \cite{mythosThreat}}
+
+With sufficient time and resources, one could train a model oneself; however, this process is outside the scope of this paper.
 
 \subsection{Incident Handling}
 
@@ -294,7 +296,18 @@ So from our examples, we have one security event with medium priority and one th
 
 \subsection{Enriching Events with Kubernetes data}
 
-When we add an MCP Server to the model configuration, we can add another line to our query.
+It would be beneficial to determine whether the workload that triggered the event is still active. For this purpose, we added an MCP server to our environment.
+
+Using the \href{https://mcpplaygroundonline.com/}{MCP Playground}, we can visualize what information our LLM can get from the MCP Server and how it would check for the workload. 
+
+\begin{figure}[H]
+\centering
+\caption {MCP Playground}
+\includegraphics[width=0.9\linewidth]{images/mcp-playground.png}
+\label{fig:mcp-playground}
+\end{figure}
+
+Once we add an MCP Server to the model configuration, we can add another line to our query.
 
 \indent\colorbox{codegrey}{
     \parbox{0.8\linewidth}{
@@ -302,32 +315,271 @@ Is the workload still active?
      }
 }
 
-The answer will allow us to determine whether the workload that triggered the security event is still active. We can use this information to adjust the priority of the recommended actions.
+The model will evaluate the MCP server's response to determine whether the workload that triggered the security event is still active.
+
+\begin{lstlisting}[caption=MCP Server Response, frame=single, basicstyle=\ttfamily\small, breaklines=true]
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "
+NAMESPACE                  NAME
+cattle-gatekeeper-system   gatekeeper-audit-748bc48fd-nfg4j
+cattle-gatekeeper-system   gatekeeper-manager-857cdcc647-jw8zd
+cattle-gatekeeper-system   gatekeeper-manager-857cdcc647-ndjgd"
+    }
+  ]
+}
+
+\end{lstlisting}
+
+We can use this information to adjust the priority of the recommended actions.
 
 \subsection{Using LLM for creating internal incidents}
 
-Having the model decide whether to create an internal incident for a security event will help reduce alarm fatigue if it can classify events correctly. Kubernetes has been around for some time and should be in the training data of most, if not all, currently available models.
+Having the model decide whether to create an internal incident for a security event will help reduce alarm fatigue if it can classify events correctly. Kubernetes and SUSE Security have been around for some time and should be in the training data of most, if not all, currently available models.
 
 However, accurately assessing the severity of a CVE requires up-to-date information, which may conflict with the need for an air-gapped environment in regulated industries.
 
-From our model, we obtain the priority of the recommended remediation, which we can augment with data from the MCP server. On a priority scale of None, Low, Medium, High, and Critical, we could introduce a cutoff at Medium if the workload is still active, and at High if it is no longer active.
+SUSE Security itself has a mechanism to update its CVE database by reloading one of its images, which would need to be transferred manually every day in a fully air-gapped environment.\footnote{See \textit{SUSE (2026)}: Update the CVE Database. \cite{scannerUpdate}} The process used for this update could also be extended to perform regular model updates.
+
+\begin{figure}[H]
+\centering
+\caption {CVE Database}
+\includegraphics[width=0.9\linewidth]{images/cve-database.png}
+\label{fig:cve-database}
+\end{figure}
+
+From the model, we obtain the priority of the recommended remediation, which we then can augment with data from the MCP server. On a priority scale of None, Low, Medium, High, and Critical, we could introduce a cutoff at Medium if the workload is still active, and at High if it is no longer active.
 
 Based on this decision, the bridge could be enhanced to use the incident analysis from our model and create an incident by calling the ITSM tool's REST API using the Python Requests package.\footnote{See \textit{BMC (2026)}: Using the platform REST API to create an incident entry. \cite{bmcCreate}}\textsuperscript{,}\footnote{See \textit{Python Software Foundation (2026)}: Requests. \cite{pythonRequests}}
 
 Events below the cutoff would not create an incident; however, they would still be available in the long-term data storage for forensic analysis and summary reports.
 
+In our examples above, for the first event, it would mean creating an internal incident, as the event had medium priority while the workload was still active. For the second, low-priority event, no event would be created.
+
 \subsection{Reporting}
 
-So far, we have only handled internal events.
+So far, we have only handled internal events. We now need to add another triage for actual breaches, to create the formal incident reports that NIS2 requires.
 
-If the incident is critical and affects the availability of critical services, it will need to be reported to the BSI, using a NIS2-Compliant Incident Response Template.\footnote{See \textit{Calloway, A. (2026)}: Incident Response Plan Template. \cite{responsePlan}}
+If an incident is critical and affects the availability of critical services, it will need to be reported to the BSI, using a NIS2-Compliant Incident Response Template.\footnote{See \textit{Calloway, A. (2026)}: Incident Response Plan Template. \cite{responsePlan}} While we will develop a bespoke approach in this paper, it's worth noting that several commercial solutions already offer structured workflows and audit-proof records for this.\footnote{See \textit{Formalize (2026)}: Von IT‑Grundschutz zu NIS-2. \cite{formalize}}
 
-\subsection{Types of required reports}
+Now, let's look at a critical event.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\# NeuVector Security Incident Analysis
+    }
+}
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Summary
+
+Severity: Critical
+
+A privileged container named nsenter-ipp9hg spawned an interactive bash shell via nsenter, violating its process profile.     
+     }
+}
+
+Spawning a shell and gaining access to the host's operating system is indeed a very serious breach.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Vulnerability Detail
+
+\textbar{} Indicator \textbar{} Risk \textbar{}
+
+\textbar{}-----------\textbar{}------\textbar{}
+
+\textbar{} nsenter as parent process \textbar{} Host namespace escape tool \textbar{}
+
+\textbar{} bash -l (login shell) \textbar{} Likely human operator or backdoor \textbar{}
+
+\textbar{} proc\_effective\_user=root \textbar{} Full root privileges \textbar{}
+
+\textbar{} alpine:latest image \textbar{} Generic base image \textbar{}
+
+\textbar{} workload\_domain=default \textbar{} Running in default namespace \textbar{}
+
+\textbar{} Pod name pattern nsenter-ipp9hg \textbar{} Typical of manual pod injection \textbar{}
+    }
+}
+
+Our model identifies two possible attack patterns.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Attack Pattern
+
+Legitimate but dangerous: kubectl debug or manual ephemeral pod used for node debugging
+   
+Malicious: Attacker with kubectl exec and pod create permissions attempting host namespace breakout
+    }
+}
+
+It also proposes immediate actions.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Immediate Actions
+
+Identify who created this pod
+
+Check audit logs for pod creation
+
+Kill the pod immediately if unauthorized
+
+Check for host-level impact on the node
+    }
+}
+
+And offers its final verdict.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Verdict
+
+High-confidence host namespace escape attempt or unauthorized privileged debugging session. Treat it as a compromise until proven otherwise
+    }
+}
+
+For this paper, we will assume that a malicious actor gained access to the host operating system and exfiltrated customer data.
 
 \subsection{Using LLM for reporting}
 
+As our model identified this as a serious breach and the human IT Security staff supported this judgment, it's now time to report the incident to the BSI. As outlined in \ref{reporting-reqs}, there are three reports to be generated:
+
+\begin{itemize}
+    \item Early Warning
+    \item Incident Notification
+    \item Final Report
+\end{itemize}
+
+According to Article 23 of the NIS2 directive, the Early Warning must be submitted without undue delay and within 24 hours of becoming aware of a significant incident.
+
+The Incident Notification (Detailed Report) must then be submitted within 72 hours of the early warning.
+
+And the Final Report (Post-Incident Review) must be submitted within one month of the incident notification (or longer if justified by complexity).
+
+Let's begin with the Early Warning, using the templates mentioned earlier.\footnote{See \textit{Calloway, A. (2026)}: Incident Response Plan Template. \cite{responsePlan}} We have made the templates available to our model.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+From the previous event, create a report using the NIS2 Early Warning Template
+     }
+}
+
+The model will respond by filling in the fields from the incident.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\# Early Warning
+
+Subject: Early Warning - Cybersecurity Incident (NIS2)
+
+Incident Time: 2026-05-25T15:46:34Z
+
+Severity: Critical
+
+Nature of Incident: Host namespace breakout
+
+Initial Impact: Data breach
+
+Contact: IRT Lead
+    }
+}
+
+Depending on the setup and processes, the model could either send the Early Warning to the BSI itself or wait for human interaction.
+
+At the latest, after 72 hours, we need to provide a detailed incident report.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+From the previous event, create a report using the NIS2 Incident Notification Template
+     }
+}
+
+The model will respond by filling in the incident fields, and the IT security team will need to add details about the presumed data breach.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\# Incident Notification
+
+Subject: Incident Notification
+
+Description: nsenter is specifically used to enter host namespaces (PID, network, mount, etc.). Executing bash -l as root after nsenter execution strongly suggests active host-level compromise or reconnaissance
+
+Impact: Host Operating System access on the main customer database server, suspect exfiltration of customer payment details
+
+Mitigation Measures: The workload was identified and deleted
+
+Next Steps: Review the affected node
+    }
+}
+
+The Incident Report needs to be sent to the BSI, and within a month, we need to submit the final report.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+From the previous event, prepare a final report using the NIS2 Final Report Template
+     }
+}
+
+The model will prepare the final report, which then needs to be augmented by the IT security team, as the model receives only Kubernetes security signals and has access only to the Kubernetes layer.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\# Final Report
+
+Subject: Final Incident Report
+
+Root Cause Analysis: An unprotected namespace allowed a malicious host namespace breakout
+
+Impact Assessment: Several Megabytes of customer payment data were exfiltrated before the breach was closed
+
+Response Timeline: Within a minute of the incident, the malicious pod was identified and deleted. The cluster was quarantined, and the database was checked. Affected customers were notified
+
+Lessons Learned: 
+
+Enforce PodSecurity restricted or baseline in the default namespace
+
+Restrict hostPID: true via OPA Gatekeeper
+
+Audit RBAC and identify who has pods/create in the default namespace
+
+Evidence Preserved: All security events from the past two hours leading up to the incident were exported from Elasticsearch; also, all container logs from the same time frame were exported
+     }
+}
+
+For the final report, it's crucial not only to process the security signals as they occur but also to retain them for long-term analysis. The event data and model responses in our bridge are ephemeral and might age out soon.
+
 \subsection{Adding LLM to long-term data storage}
 
-Connect to a local LLM for Elastic Security using LM Studio \href{https://www.elastic.co/docs/explore-analyze/ai-features/llm-guides/connect-to-lmstudio-security}{LM Studio}.
+So far, we have only looked at the connection from our event stream to a local LLM. As discussed before, we also have the incident information in our long-term storage.
+
+\begin{figure}[H]
+\centering
+\caption {Incident Details}
+\includegraphics[width=0.9\linewidth]{images/nsenter-kibana.png}
+\label{fig:nsenter-kibana}
+\end{figure}
+
+Elasticsearch has a powerful query language, Kibana Query Language (KQL). KQL allows us to select any field from any document stored in the data view. For example, we could select all threat notifications with "MESSAGE: notification=threat"
+
+\begin{figure}[H]
+\centering
+\caption {Threat Notification}
+\includegraphics[width=0.9\linewidth]{images/notification-threat.png}
+\label{fig:notification-threat}
+\end{figure}
+
+In Elasticsearch, anything that can be expressed with KQL can also be alarmed and sent to a webhook or API server, as we propose in our event bridge. With the appropriate license, Elasticsearch can also access external ITSM systems directly.
+
+Depending on the version and license, Kibana can connect directly to local LLMs for intelligence and assistance.\footnote{See \textit{Elastic (2025)}: Connect to your own local LLM. \cite{kibanaLLM}} In its documentation, Elastic recommends Mistral-Nemo-Instruct-2407 for security inference.\footnote{See \textit{Hugging Face (2025)}: Mistral-Nemo-Instruct-2407. \cite{mistralInstruct}}
 
 \subsection{Summary}
+
+Our experiment has shown that a local LLM can support the IT security team in handling security incidents by evaluating the security signals sent from SUSE Security. 
+
+It can also support the team by preparing the necessary information for NIS2 reports through automated data collection and templating.

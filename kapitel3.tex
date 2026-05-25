@@ -63,9 +63,9 @@ Rsyslog is lighter and faster, designed to handle large volumes of log messages 
 
 Both would have been equally good choices; in the end, the available destinations made syslog-ng the better fit.\footnote{See \textit{syslog-ng OSE (2026)}: syslog-ng destination options. \cite{ngDestinations}}
 
-In this setup, Syslog-ng runs a single-replica deployment and exposes the standard syslog TCP port 514 as a service, which we have configured in NeuVector above.
+In this setup, Syslog-ng runs a single-replica deployment and exposes the standard syslog TCP port 514 as a service, as configured in NeuVector above.
 
-\begin{lstlisting}[caption=Syslog Service definition, frame=single, basicstyle=\ttfamily\small, breaklines=true]
+\begin{lstlisting}[caption=Syslog Service Definition, frame=single, basicstyle=\ttfamily\small, breaklines=true]
 apiVersion: v1
 kind: Service
 metadata:
@@ -158,7 +158,7 @@ Elasticsearch has long been the gold standard for log file storage and analysis 
 
 In our setup, we will use an Elasticsearch instance for long-term storage of security events and for forensic analysis.
 
-Syslog-ng allows sending the events directly to Elasticsearch, with no post-processing needed.
+Syslog-ng allows events to be sent directly to Elasticsearch, with no post-processing needed.
 
 \begin{lstlisting}[caption=Destination d-elastic, frame=single, basicstyle=\ttfamily\small, breaklines=true]
 destination d_elastic {
@@ -172,7 +172,7 @@ destination d_elastic {
 
 \end{lstlisting}
 
-The standard interface to Elasticsearch data is the Kibana interface, and without defining any dashboards, we can analyze security events in Discover.
+The standard interface for Elasticsearch data is Kibana, and without defining any dashboards, we can analyze security events in Discover.
 
 \begin{figure}[H]
 \centering
@@ -181,13 +181,13 @@ The standard interface to Elasticsearch data is the Kibana interface, and withou
 \label{fig:neuvector-kibana}
 \end{figure}
 
-In addition to the ability to immediately respond to security events via the bridge and the local LLM, we now also have a long-term view of security events on our platform.
+In addition to the ability to respond immediately to security events via the bridge and the local LLM, we now have a long-term view of security events on our platform.
 
 In the following chapters, we will explore options, such as comprehensive reporting on security events, for using this data to fulfill obligations under NIS2.
 
 \subsection{MCP Server}
 
-As a companion to our LLM, we can run an MCP Server. A Kubernetes MCP server can significantly enhance security event analysis by providing the LLM with access to all cluster metadata, including information about nodes, pods, and containers. This metadata can be very useful for enriching the security log data, making it easier to analyze. However, as we move from text logic to container orchestration, we must ensure that appropriate security safeguards are in place. From Domain-Driver Design, we can borrow Bounded Contexts and the Anti-Corruption Layer.\footnote{See \textit{Traub, D. (2026)}: Rediscovering Domain-Driven Design. \cite{domainDriven}}
+As a companion to our LLM, we can run an MCP Server. A Kubernetes MCP server can significantly enhance security event analysis by providing the LLM with access to all cluster metadata, including information about nodes, pods, and containers. This metadata can be very useful for enriching security log data and making it easier to analyze. However, as we move from text logic to container orchestration, we must ensure that appropriate security safeguards are in place. From Domain-Driver Design, we can borrow Bounded Contexts and the Anti-Corruption Layer.\footnote{See \textit{Traub, D. (2026)}: Rediscovering Domain-Driven Design. \cite{domainDriven}}
 
 \begin{figure}[H]
 \centering
@@ -200,7 +200,7 @@ In our setup, to aid the LLM in interpreting Neuvector signals, we added an open
 
 RBAC in Kubernetes allows administrators to define granular permissions by creating Roles and ClusterRoles that specify which actions (e.g., get, create, delete) are allowed on which resources (e.g., pods, deployments, secrets). These roles are then bound to users or service accounts via RoleBindings (namespace-scoped) or ClusterRoleBindings (cluster-wide):
 
-\begin{lstlisting}[caption=Cluster Role definition, frame=single, basicstyle=\ttfamily\small, breaklines=true]
+\begin{lstlisting}[caption=Cluster Role Definition, frame=single, basicstyle=\ttfamily\small, breaklines=true]
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -230,13 +230,13 @@ The final setup with all components will then look like this in the management c
 \label{fig:neuvector-rancher}
 \end{figure}
 
-All components are deployed as single-replica deployments, which is sufficient for an experiment or proof-of-concept, but should be changed to a high-availability configuration for production.
+All components are deployed as single-replica deployments, which is sufficient for an experiment or proof of concept, but should be changed to a high-availability configuration for production.
 
 \subsection{Air Gap}
 
 To support regulated industries, the entire setup can be deployed in an air-gapped environment without connection to the public internet.
 
-However, there are some caveats: After their initial training, model knowledge quickly becomes outdated, which might influence the accuracy of its decision-making.
+However, there are some caveats: After its initial training, the model's knowledge quickly becomes outdated, which might affect the accuracy of its decision-making.
 
 As discussed in \ref{threat-intelligence}, it's important to augment the model's knowledge with current information, especially when the model itself cannot reach out to an updated CVE database or a list of current threat vectors.\footnote{See \textit{Bowie, C. et al. (2026)}: Inside the Human-AI Feedback Loop. \cite{feedbackLoop}}
 
