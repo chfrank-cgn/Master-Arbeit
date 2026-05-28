@@ -23,7 +23,7 @@ For regulated industries that cannot rely on cloud-based solutions, another ques
 
 Building custom agents may provide tailored control and alignment with specific workflows (e.g., by integrating with internal SOC tools for threat response). Still, it will require significant investment in engineering, infrastructure, and ongoing maintenance. On the other hand, buying off-the-shelf agentic platforms (e.g., from SUSE) provides faster deployment and pre-built capabilities. Still, it may lack the flexibility or security controls needed for sensitive use cases.\footnote{See \textit{Ross, B. (2026)}: The hidden cost of building. \cite{hiddenCost}}
 
-For this paper, we won't be able to address the more philosophical questions about human-machine interaction fully; nevertheless, we can highlight a couple of points before continuing with the experiment.
+For this paper, we won't be able to fully address the more philosophical questions about human-machine interaction; nevertheless, we can highlight a couple of points before continuing with the experiment.
 
 \subsubsection{Sentience}
 
@@ -39,7 +39,7 @@ At the heart of the problem is the probabilistic nature of LLMs, which generate 
 
 These issues are particularly problematic in NIS2 reporting, where precision, repeatability, and clarity are critical.
 
-\subsubsection{Oversight}
+\subsubsection{US Oversight}
 
 As autonomous AI spreads throughout our lives and work, governments around the world are considering regulation and oversight.
 
@@ -50,6 +50,14 @@ At its core, the order directs coordinated action across federal agencies to mod
 In Europe, much of this would be handled under the NIS2 framework, with greater focus on the civilian sector.
 
 An important section in the order addresses covered frontier models, highly capable AI systems such as Anthropic's Mythos, that require special oversight as they could become powerful weapons for cyber adversaries.
+
+\subsection{EU Oversight}
+
+The European Union is also exploring the legal and technical challenges posed by autonomous AI agents within its regulatory frameworks, particularly the AI Act, GDPR, and NIS2. The authors of a recent paper argue that traditional compliance models—designed for static or human-supervised AI systems—are inadequate for autonomous agents, which can plan, execute multi-step actions, and interact with external tools with minimal human oversight. This autonomy introduces novel risks, such as unpredictable behavior, accountability gaps, and systemic vulnerabilities, which current regulations struggle to address.\footnote{See \textit{Nannini, L. et. al. (2026)}: AI Agents under EU Law. \cite{nannini2026}}
+
+The paper proposes a three-layered compliance architecture to bridge this gap: At the foundational layer, it emphasizes transparency and auditing, requiring AI providers to implement detailed logging, explainability mechanisms, and real-time monitoring to track an agent's decisions and actions. The operational layer focuses on risk management and alignment, advocating for dynamic compliance frameworks that adapt to an agent's evolving behavior. The governance layer then addresses legal and ethical accountability, proposing clear liability frameworks for AI providers, users, and third-party tool integrators.
+
+The paper then highlights that autonomous agents operating in sectors such as energy, healthcare, and digital infrastructure could amplify systemic risks (e.g., cascading failures due to misconfigured automation). They recommend integrating NIS2's incident reporting requirements (Article 23) with AI-specific provisions, such as mandatory disclosure of agent-driven incidents and coordination protocols between AI providers and the BSI.
 
 \subsection{Incident Handling}
 
