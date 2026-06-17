@@ -104,7 +104,7 @@ destination d_mqtt {
 
 \subsection{Ollama}
 
-As of the time of writing, several tools are available for running AI models locally.\footnote {See \textit{Calloway, A. (2026)}: Common Applications to Run AI Models Locally. \cite{localLlama}}
+As of this writing, several tools are available for running AI models locally.\footnote {See \textit{Calloway, A. (2026)}: Common Applications to Run AI Models Locally. \cite{localLlama}}
 
 There is Ollama, an open-source tool to run LLMs locally. Ollama supports models such as Gemma, Llama, Mistral, and Qwen and provides a widely publicized API for programmatic access.
 
@@ -185,7 +185,7 @@ In addition to the ability to respond immediately to security events via the bri
 
 In the following chapters, we will explore options, such as comprehensive reporting on security events, for using this data to fulfill obligations under NIS2.
 
-\subsection{MCP Server}
+\subsection{MCP Server}\label{mcp-view}
 
 As a companion to our LLM, we can run an MCP Server. A Kubernetes MCP server can significantly enhance security event analysis by providing the LLM with access to all cluster metadata, including information about nodes, pods, and containers. This metadata can be very useful for enriching security log data and making it easier to analyze. However, as we move from text logic to container orchestration, we must ensure that appropriate security safeguards are in place. From Domain-Driver Design, we can borrow Bounded Contexts and the Anti-Corruption Layer.\footnote{See \textit{Traub, D. (2026)}: Rediscovering Domain-Driven Design. \cite{domainDriven}}
 
@@ -200,7 +200,7 @@ In our setup, to aid the LLM in interpreting Neuvector signals, we added an open
 
 RBAC in Kubernetes allows administrators to define granular permissions by creating Roles and ClusterRoles that specify which actions (e.g., get, create, delete) are allowed on which resources (e.g., pods, deployments, secrets). These roles are then bound to users or service accounts via RoleBindings (namespace-scoped) or ClusterRoleBindings (cluster-wide):
 
-\begin{lstlisting}[caption=Cluster Role Definition, frame=single, basicstyle=\ttfamily\small, breaklines=true]
+\begin{lstlisting}[caption=Cluster View Role Definition, frame=single, basicstyle=\ttfamily\small, breaklines=true]
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -238,7 +238,7 @@ To support regulated industries, the entire setup can be deployed in an air-gapp
 
 However, there are some caveats: After its initial training, the model's knowledge quickly becomes outdated, which might affect the accuracy of its decision-making.
 
-As discussed in \ref{threat-intelligence}, it's important to augment the model's knowledge with current information, especially when the model itself cannot reach out to an updated CVE database or a list of current threat vectors.\footnote{See \textit{Bowie, C. et al. (2026)}: Inside the Human-AI Feedback Loop. \cite{feedbackLoop}}
+As discussed in \ref{threat-intelligence}, it's important to augment the model's knowledge with current information, especially when the model itself cannot access an up-to-date CVE database or a list of current threat vectors.\footnote{See \textit{Bowie, C. et al. (2026)}: Inside the Human-AI Feedback Loop. \cite{feedbackLoop}}
 
 Another factor to consider for long-term usage is model bias.\footnote{See \textit{Xu, J. et al. (2026)}: AI self preference. \cite{xu2026}} If an offline model needs to be updated or replaced, it might disfavor previous decisions or analyses made by a different model.
 

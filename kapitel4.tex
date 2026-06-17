@@ -358,7 +358,7 @@ Events below the cutoff would not create an incident; however, they would still 
 
 In our examples above, for the first event, it would mean creating an internal incident, as the event had medium priority while the workload was still active. For the second, low-priority event, no event would be created.
 
-\subsection{Reporting}
+\subsection{Reporting}\label{breach}
 
 So far, we have only handled internal events. We now need to add another triage for actual breaches, to create the formal incident reports that NIS2 requires.
 
@@ -440,13 +440,13 @@ And offers its final verdict.
     \parbox{0.8\linewidth}{
 \#\#\# Verdict
 
-High-confidence host namespace escape attempt or unauthorized privileged debugging session. Treat it as a compromise until proven otherwise
+High-confidence host namespace escape attempt or unauthorized privileged debugging session. Treat it as a compromise until proven otherwise.
     }
 }
 
 For this paper, we will assume that a malicious actor gained access to the host operating system and exfiltrated customer data.
 
-\subsection{Using LLM for reporting}
+\subsection{Using LLM for reporting}\label{reporting}
 
 As our model identified this as a serious breach and the human IT Security staff supported this judgment, it's now time to report the incident to the BSI. As outlined in \ref{reporting-reqs}, there are three reports to be generated:
 
@@ -466,7 +466,7 @@ Let's begin with the Early Warning, using the templates mentioned earlier.\footn
 
 \indent\colorbox{codegrey}{
     \parbox{0.8\linewidth}{
-From the previous event, create a report using the NIS2 Early Warning Template
+From the previous event, create a report using the NIS2 Early Warning Template.
      }
 }
 
@@ -496,7 +496,7 @@ At the latest, after 72 hours, we need to provide a detailed incident report.
 
 \indent\colorbox{codegrey}{
     \parbox{0.8\linewidth}{
-From the previous event, create a report using the NIS2 Incident Notification Template
+From the previous event, create a report using the NIS2 Incident Notification Template.
      }
 }
 
@@ -508,7 +508,7 @@ The model will respond by filling in the incident fields, and the IT security te
 
 Subject: Incident Notification
 
-Description: nsenter is specifically used to enter host namespaces (PID, network, mount, etc.). Executing bash -l as root after nsenter execution strongly suggests active host-level compromise or reconnaissance
+Description: nsenter is specifically used to enter host namespaces (PID, network, mount, etc.). Executing bash -l as root after nsenter execution strongly suggests active host-level compromise or reconnaissance.
 
 Impact: Host Operating System access on the main customer database server, suspect exfiltration of customer payment details
 
@@ -522,7 +522,7 @@ The Incident Report needs to be sent to the BSI, and within a month, we need to 
 
 \indent\colorbox{codegrey}{
     \parbox{0.8\linewidth}{
-From the previous event, prepare a final report using the NIS2 Final Report Template
+From the previous event, prepare a final report using the NIS2 Final Report Template.
      }
 }
 
@@ -538,13 +538,13 @@ Root Cause Analysis: An unprotected namespace allowed a malicious host namespace
 
 Impact Assessment: Several Megabytes of customer payment data were exfiltrated before the breach was closed
 
-Response Timeline: Within a minute of the incident, the malicious pod was identified and deleted. The cluster was quarantined, and the database was checked. Affected customers were notified
+Response Timeline: Within a minute of the incident, the malicious pod was identified and deleted. The cluster was quarantined, and the database was checked. Affected customers were notified.
 
 Lessons Learned: 
 
-Enforce PodSecurity restricted or baseline in the default namespace
+Enforce PodSecurity restricted or baseline in the default namespace.
 
-Restrict hostPID: true via OPA Gatekeeper
+Restrict hostPID: true via OPA Gatekeeper.
 
 Audit RBAC and identify who has pods/create in the default namespace
 
@@ -574,7 +574,7 @@ Elasticsearch has a powerful query language, Kibana Query Language (KQL). KQL al
 \label{fig:notification-threat}
 \end{figure}
 
-In Elasticsearch, anything that can be expressed with KQL can also be alarmed and sent to a webhook or API server, as we propose in our event bridge. With the appropriate license, Elasticsearch can also access external ITSM systems directly.
+In Elasticsearch, anything that can be expressed with KQL can also be alarmed and sent to a webhook or API server, as we propose in our event bridge. With the appropriate license, Elasticsearch can also directly access external ITSM systems.
 
 Depending on the version and license, Kibana can connect directly to local LLMs for intelligence and assistance.\footnote{See \textit{Elastic (2025)}: Connect to your own local LLM. \cite{kibanaLLM}} In its documentation, Elastic recommends Mistral-Nemo-Instruct-2407 for security inference.\footnote{See \textit{Hugging Face (2025)}: Mistral-Nemo-Instruct-2407. \cite{mistralInstruct}}
 

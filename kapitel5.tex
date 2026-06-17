@@ -23,7 +23,7 @@ For regulated industries that cannot rely on cloud-based solutions, another ques
 
 Building custom agents may provide tailored control and alignment with specific workflows (e.g., by integrating with internal SOC tools for threat response). Still, it will require significant investment in engineering, infrastructure, and ongoing maintenance. On the other hand, buying off-the-shelf agentic platforms (e.g., from SUSE) provides faster deployment and pre-built capabilities. Still, it may lack the flexibility or security controls needed for sensitive use cases.\footnote{See \textit{Ross, B. (2026)}: The hidden cost of building. \cite{hiddenCost}}
 
-For this paper, we won't be able to address the more philosophical questions about human-machine interaction fully; nevertheless, we can highlight a couple of points before continuing with the experiment.
+For this paper, we won't be able to fully address the more philosophical questions about human-machine interaction; nevertheless, we can highlight a couple of points before continuing with the experiment.
 
 \subsubsection{Sentience}
 
@@ -63,11 +63,146 @@ The paper then highlights that autonomous agents operating in sectors such as en
 
 \subsubsection{Conclusion}
 
-While autonomous agents promise unprecedented acceleration across all kinds of operations, improperly governed agents also introduce risks at machine speed. Sentient or not, the risk of hallucination is real and does require oversight and governance.
+While autonomous agents promise enormous acceleration across all kinds of operations, improperly governed agents also introduce risks. Whether we deem AI agents sentient or not, the risk of hallucination is real and requires oversight and governance, as outcomes may not be deterministic.
+
+\subsection{Enabling the agent to act on Kubernetes}
+
+To enable the autonomous agent to act, we will use Kubernetes RBAC and change the cluster role of the MCP server from view (see \ref{mcp-view}) to cluster-admin:
+
+\begin{lstlisting}[caption=Cluster Admin Role Definition, frame=single, basicstyle=\ttfamily\small, breaklines=true]
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/name: kubernetes-mcp-server
+    app.kubernetes.io/instance: mcp-server
+  name: mcp-server
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: mcp-server
+  namespace: mcp-server
+  
+\end{lstlisting}
+
+With the new role binding, the agent can now act autonomously on the Kubernetes cluster.
+
+\subsection{Enabling the agent to act on incidents}
+
+In addition to enabling the agent to act on Kubernetes, we also need to enable it to create and handle incidents.
+
+When it comes to handling cybersecurity incidents under NIS2, not all ITSM tools are created equal and offer the same functionality. Two of the main contenders in the Enterprise ITSM space are BMC Helix\footnote{See \textit{BMC Helix (2026)}: IT service management solutions. \cite{bmcHelix}} and ServiceNow\footnote{See \textit{ServiceNow (2026)}: IT Service Management. \cite{serviceNow}}. Both solutions offer an MCP server, with ServiceNow even providing an open-source solution.\footnote{See \textit{Buckner, M. (2026)}: ServiceNow MCP Server. \cite{snowMcp}}
+
+The MCP Server offers tools such as:
+
+\begin{itemize}
+    \item create\_incident
+    \item update\_incident
+    \item add\_work\_notes
+    \item natural\_language\_search
+\end{itemize}
+
+With these tools, an autonomous agent can create incidents in the corporate ITSM tool and follow up on them, e.g., for recurring incidents, without resorting to API calls.
+
+\subsection{OpenAI chat completion}
+
+To include an autonomous agent in the setup with minimal changes, we use the agent's Chat Completion interface\footnote{See \textit{Steinberger, P. (2026)}: OpenAI chat completions. \cite{clawChat}} and keep the event stream unchanged.
+
+\begin{figure}[H]
+\centering
+\caption {SUSE Security Agent Stream}
+\includegraphics[width=0.9\linewidth]{images/neuvector-agent-stream.png}
+\label{fig:agent-stream}
+\end{figure}
+
+Instead of talking to an LLM, we now pass the Neuvector security events, together with our prompts, into an autonomous agent.
 
 \subsection{Incident Handling}
 
-\subsection{Enriching Events with Kubernetes data}
+Using the same signal as before in \ref{breach}, the agent again identifies this as a serious breach.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\# Analysis: Process Profile Violation — `nsenter` + `bash` as root
+    }
+}
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Severity Assessment: HIGH / CRITICAL
+
+This is **extremely suspicious** and warrants immediate investigation.
+     }
+}
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Is This a Breach?
+
+Treat it as a breach until proven otherwise.
+
+nsenter can attach to host namespaces (PID, network, mount). If successful, the attacker gains node-level access, not just container-level access.
+     }
+}
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+\#\#\# Create an Incident?
+
+Yes. Immediately. Escalate as a P1 Security Incident.
+
+The combination of nsenter + alpine:latest + root bash -l shell is not accidental - this is a deliberate privileged access tool.
+     }
+}
+
+\subsection{Letting the agent mitigate the incident}
+
+The agent has access to the Kubernetes cluster via the MCP server, so we can instruct it to mitigate the threat right away by adding these lines to our prompt:
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+If this is a breach and the pod is still active, delete the associated deployment, stateful set, or daemon set without asking for confirmation
+     }
+}
+
+\subsection{Letting the agent submit an incident}
+
+Similarly, since the agent has access to our ITSM system through its MCP server, we can instruct it to create an incident:
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+If this is serious and warrants immediate attention, create a P1 Security Incident, otherwise create a P3 Normal Incident
+     }
+}
+
+\subsection{Letting the agent inform the BSI}
+
+Using the same templates as in \ref{reporting}, we can instruct it to submit the Early Warning report:
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+If this is a breach, create a report using the NIS2 Early Warning Template and email it to BSI.
+     }
+}
+
+\subsection{Letting the agent handle further reporting}
+
+To fulfill further reporting requirements under NIS2, we can instruct the agent to schedule the mandatory follow-up reports.
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+Create a cron table entry to run in 72 hours that generates a report using the NIS2 Incident Notification Template from the incident data and emails it to BSI.
+     }
+}
+
+\indent\colorbox{codegrey}{
+    \parbox{0.8\linewidth}{
+Create a cron table entry to run in 28 days that generates a report using the NIS2 Final Report Template from the incident data and emails it to BSI.
+     }
+}
 
 \subsection{Adding agentic AI to long-term data storage}
 
@@ -78,14 +213,6 @@ Connect to a local LLM for Elastic Security using LM Studio \href{https://www.el
 SearchClaw: Bring Elasticsearch to OpenClaw with composable
 \href{https://www.elastic.co/search-labs/blog/openclaw-elasticsearch-ai-agents}{skills}
 
-\subsection{Using LLM to mitigate incidents}
-
-\subsection{Using LLM to submit incidents}
-
-\subsection{Reporting}
-
-\subsection{Types of required reports}
-
-\subsection{Using LLM to submit required reports}
-
 \subsection{Summary}
+
+By adding autonomous agentic capabilities, the setup not only supports the IT Security Team through notifications and report preparation, but can also decide to take remedial action and initiate the required reporting chain.
