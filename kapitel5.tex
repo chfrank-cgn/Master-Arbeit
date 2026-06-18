@@ -174,7 +174,7 @@ Similarly, since the agent has access to our ITSM system through its MCP server,
 
 \indent\colorbox{codegrey}{
     \parbox{0.8\linewidth}{
-If this is serious and warrants immediate attention, create a P1 Security Incident, otherwise create a P3 Normal Incident
+If this is serious and warrants immediate attention, then create a P1 Security Incident, otherwise create a P3 Normal Incident
      }
 }
 
@@ -204,15 +204,35 @@ Create a cron table entry to run in 28 days that generates a report using the NI
      }
 }
 
+\subsection{Adding the agent to the team}
+
+As we discussed in the previous chapter, having a system assist with alert triage can significantly reduce Alert Fatigue.\footnote{See \textit{IBM (2026)}: What is Alert Fatigue. \cite{alertFatigue}}
+
+With an autonomous agent, we can enable direct communication with the human team members via channels such as Microsoft Teams or Slack. In agent terms, these channels are treated as distinct inputs, and we want to ensure that all channels share a single session for continuity.\footnote{See \textit{Steinberger, P. (2026)}: Session Management. \cite{clawSession}}
+
+The more capabilities we give to the agentic colleague, the more mindful we need to be of the non-deterministic nature of their decision and thought process.
+
+In our setup, we use the bridge to pass a complete set of prompts and instructions for each security signal, thereby avoiding context loss and achieving consistent results.
+
+In recent literature, the context of an agent harness is being discussed to safeguard its actions; this would go beyond the scope of this paper, but should be taken into account once agentic colleagues are added to the team.\footnote{See \textit{Warfield, D. (2026)}: Agent Harnesses. \cite{agentHarness}}
+
 \subsection{Adding agentic AI to long-term data storage}
 
-Elastic SIEM \href{https://www.elastic.co/security}{Security}
+In \ref{elastic}, we've introduced Elasticsearch as the long-term data storage for security signals.
 
-Connect to a local LLM for Elastic Security using LM Studio \href{https://www.elastic.co/docs/explore-analyze/ai-features/llm-guides/connect-to-lmstudio-security}{LM Studio}.
+Independent of our bridge, Elastic provides a full commercial SIEM solution in its own right and provides an Elasticsearch OpenCLAW skill for agents.\footnote{See \textit{Salgado, A. (2026)}: Search Claw. \cite{searchClaw}}
 
-SearchClaw: Bring Elasticsearch to OpenClaw with composable
-\href{https://www.elastic.co/search-labs/blog/openclaw-elasticsearch-ai-agents}{skills}
+\begin{figure}[H]
+\centering
+\caption {SUSE Security Elastic Agent}
+\includegraphics[width=0.9\linewidth]{images/neuvector-agent-elastic.png}
+\label{fig:agent-elastic}
+\end{figure}
+
+As with the agent harnesses above, evaluating Elastic's agentic SIEM platform would go beyond the scope of this paper.
 
 \subsection{Summary}
 
-By adding autonomous agentic capabilities, the setup not only supports the IT Security Team through notifications and report preparation, but can also decide to take remedial action and initiate the required reporting chain.
+By adding autonomous agentic capabilities, we've shown that the setup not only supports the IT Security Team through notifications and report preparation, but can also be empowered to decide to take remedial action and to initiate the required NIS2 reporting chain.
+
+By offloading a significant amount of work from the IT security team and taking over some regulatory requirements, the agent can, like an additional human colleague, reduce team members' stress and possibly ease their life partners' mental load.\footnote{See \textit{FES (2026)}: Mental Load. \cite{mentalLoad}}
