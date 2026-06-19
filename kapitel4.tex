@@ -37,7 +37,7 @@ Gemma3 can thus also generate concise summaries of security events, which will b
 
 They also found that Gemma3's context window is smaller than that of models such as Llama 3 and Claude 3. This will affect its ability to analyze complex attack chains across multiple logs or over longer periods, but for now, we will stick with the Gemma3 family.
 
-To select a model from the Gemma3 family, we must consider the available hardware. For this paper, we use a Standard\_NC6s\_v3 system as the node on which Ollama will run. This system will provide an NVIDIA Tesla V100 GPU with 16GB of VRAM.\footnote{See \textit{Azure (2026)}: NCv3 size series. \cite{ncv3Series}}
+To select a model from the Gemma3 family, we must consider the available hardware. For this paper, we use a Standard\_NC6s\_v3 system as the node on which Ollama runs. This system will provide an NVIDIA Tesla V100 GPU with 16GB of VRAM.\footnote{See \textit{Azure (2026)}: NCv3 size series. \cite{ncv3Series}}
 
 The Gemma3 family of models in the Ollama library comprises variants with different quantizations and memory requirements.\footnote{See \textit{Ollama (2026)}: Gemma3. \cite{modelsGemma3}}
 
@@ -414,7 +414,7 @@ Our model identifies two possible attack patterns.
 
 Legitimate but dangerous: kubectl debug or manual ephemeral pod used for node debugging
    
-Malicious: Attacker with kubectl exec and pod create permissions attempting host namespace breakout
+Malicious: Attacker with kubectl exec and pod create permissions attempting host namespace breakout.
     }
 }
 
@@ -424,13 +424,13 @@ It also proposes immediate actions.
     \parbox{0.8\linewidth}{
 \#\#\# Immediate Actions
 
-Identify who created this pod
+Identify who created this pod.
 
-Check audit logs for pod creation
+Check audit logs for pod creation.
 
-Kill the pod immediately if unauthorized
+Kill the pod immediately if unauthorized.
 
-Check for host-level impact on the node
+Check for host-level impact on the node.
     }
 }
 
@@ -567,6 +567,9 @@ So far, we have only looked at the connection from our event stream to a local L
 
 Elasticsearch has a powerful query language, Kibana Query Language (KQL). KQL allows us to select any field from any document stored in the data view. For example, we could select all threat notifications with "MESSAGE: notification=threat"
 
+In Elasticsearch, anything that can be expressed with KQL can also be alarmed and sent to a webhook or API server, as we propose in our event bridge. With the appropriate license, Elasticsearch can also directly access external ITSM systems.
+
+\pagebreak
 \begin{figure}[H]
 \centering
 \caption {Threat Notification}
@@ -574,12 +577,10 @@ Elasticsearch has a powerful query language, Kibana Query Language (KQL). KQL al
 \label{fig:notification-threat}
 \end{figure}
 
-In Elasticsearch, anything that can be expressed with KQL can also be alarmed and sent to a webhook or API server, as we propose in our event bridge. With the appropriate license, Elasticsearch can also directly access external ITSM systems.
-
 Depending on the version and license, Kibana can connect directly to local LLMs for intelligence and assistance.\footnote{See \textit{Elastic (2025)}: Connect to your own local LLM. \cite{kibanaLLM}} In its documentation, Elastic recommends Mistral-Nemo-Instruct-2407 for security inference.\footnote{See \textit{Hugging Face (2025)}: Mistral-Nemo-Instruct-2407. \cite{mistralInstruct}}
 
 \subsection{Summary}
 
-Our experiment has shown that a local LLM can support the IT security team in handling security incidents by evaluating the security signals sent from SUSE Security. 
+Our experiment has shown that a local LLM can support the IT security team in handling security incidents by evaluating security signals from SUSE Security and performing initial triage.
 
-It can also support the team by preparing the necessary information for NIS2 reports through automated data collection and templating.
+It can also support the team by preparing the necessary information for NIS2 reports through automated data collection and templating, easing the team's regulatory compliance workload.

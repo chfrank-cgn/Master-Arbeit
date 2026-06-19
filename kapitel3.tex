@@ -188,7 +188,7 @@ In the following chapters, we will explore options, such as comprehensive report
 
 \subsection{MCP Server}\label{mcp-view}
 
-As a companion to our LLM, we will run an MCP Server. A Kubernetes MCP server can significantly enhance security event analysis by providing the LLM with access to all cluster metadata, including information about nodes, pods, and containers. This metadata can be very useful for enriching security log data and making it easier to analyze. However, as we move from text logic to container orchestration, we must ensure that appropriate security safeguards are in place. From Domain-Driver Design, we can borrow Bounded Contexts and the Anti-Corruption Layer.\footnote{See \textit{Traub, D. (2026)}: Rediscovering Domain-Driven Design. \cite{domainDriven}}
+As a companion to our LLM, we will run an MCP Server. A Kubernetes MCP server can significantly enhance security event analysis by providing the LLM with access to all cluster metadata, including information about nodes, pods, and containers. This metadata can be very useful for enriching security log data and making it easier to analyze. However, as we move from text logic to container orchestration, we must ensure that appropriate security safeguards are in place. From Domain-Driven Design, we can borrow Bounded Contexts and the Anti-Corruption Layer.\footnote{See \textit{Traub, D. (2026)}: Rediscovering Domain-Driven Design. \cite{domainDriven}}
 
 \begin{figure}[H]
 \centering
@@ -197,7 +197,7 @@ As a companion to our LLM, we will run an MCP Server. A Kubernetes MCP server ca
 \label{fig:mcp-server}
 \end{figure}
 
-In our setup, to aid the LLM in interpreting Neuvector signals, we added an open-source Kubernetes MCP server from the Containers repository and bound its context by restricting it to read-only access, using Kubernetes' Role-Based Access Control.\footnote{See \textit{Containers (2026)}: Welcome to Containers. \cite{whichMCP}} RBAC is a security mechanism that regulates access to resources based on the roles assigned to users, groups, or service accounts.\footnote{\textit{Ferraiolo, D. et.al. (2007)}: Role-Based Access Control. \cite{rbac}}
+In our setup, to help the LLM interpret Neuvector signals, we added an open-source Kubernetes MCP server from the Containers repository. We bound its context by restricting it to read-only access, using Kubernetes' Role-Based Access Control.\footnote{See \textit{Containers (2026)}: Welcome to Containers. \cite{whichMCP}} RBAC is a security mechanism that regulates access to resources based on the roles assigned to users, groups, or service accounts.\footnote{\textit{Ferraiolo, D. et.al. (2007)}: Role-Based Access Control. \cite{rbac}}
 
 RBAC in Kubernetes allows administrators to define granular permissions by creating Roles and ClusterRoles that specify which actions (e.g., get, create, delete) are allowed on which resources (e.g., pods, deployments, secrets). These roles are then bound to users or service accounts via RoleBindings (namespace-scoped) or ClusterRoleBindings (cluster-wide):
 
@@ -248,7 +248,7 @@ Another factor to consider for long-term usage is model bias.\footnote{See \text
 
 The setup itself does not generate any personally identifiable information and therefore should not fall under the GDPR. 
 
-In production, a detailed inspection of the event-stream data will be necessary to identify any PII collected from the application that may appear in the security events sent, and the system may need to be reclassified.
+In general deployment, a detailed inspection of the event-stream data will be necessary to identify any PII collected from the application that may appear in the security events sent, and the system may need to be reclassified.
 
 \subsection{Software Versions}
 
