@@ -17,7 +17,7 @@ In late 2025, a new set of tools, namely OpenClaw, entered the landscape, commod
 
 In agentic AI, systems act as autonomous agents capable of reasoning, planning, and taking actions to achieve complex goals, such as responding to and mitigating incidents. 
 
-For IT Security teams, the question arises: how much of the day-to-day operations and decisions could be handed over to an AI agent?
+For IT Security teams, the question arises of how much of the day-to-day operations and decisions could or should be handed over to an AI agent?
 
 For regulated industries that cannot rely on cloud-based solutions, another question arises: whether they should build or buy such an autonomous system?
 
@@ -94,7 +94,7 @@ With the new role binding, the agent can now act autonomously on the Kubernetes 
 
 In addition to enabling the agent to act on Kubernetes, we also need to enable it to create and handle incidents.
 
-When it comes to handling cybersecurity incidents under NIS2, not all ITSM tools are created equal and offer the same functionality. Two of the main contenders in the Enterprise ITSM space are BMC Helix\footnote{See \textit{BMC Helix (2026)}: IT service management solutions. \cite{bmcHelix}} and ServiceNow\footnote{See \textit{ServiceNow (2026)}: IT Service Management. \cite{serviceNow}}. Both solutions offer an MCP server, with ServiceNow even providing an open-source solution.\footnote{See \textit{Buckner, M. (2026)}: ServiceNow MCP Server. \cite{snowMcp}}
+When it comes to handling cybersecurity incidents, not all ITSM tools are created equal and offer the same functionality. Two of the main contenders in the Enterprise ITSM space are BMC Helix\footnote{See \textit{BMC Helix (2026)}: IT service management solutions. \cite{bmcHelix}} and ServiceNow\footnote{See \textit{ServiceNow (2026)}: IT Service Management. \cite{serviceNow}}. Both solutions offer an MCP server, with ServiceNow even providing an open-source solution.\footnote{See \textit{Buckner, M. (2026)}: ServiceNow MCP Server. \cite{snowMcp}}
 
 The MCP Server offers tools such as:
 
@@ -108,12 +108,11 @@ The MCP Server offers tools such as:
 With these tools, an autonomous agent can create incidents in the corporate ITSM tool and follow up on them, e.g., for recurring incidents, without resorting to API calls.
 
 \subsection{OpenAI chat completion}
-
 To include an autonomous agent in the setup with minimal changes, we use the agent's Chat Completion interface\footnote{See \textit{Steinberger, P. (2026)}: OpenAI chat completions. \cite{clawChat}} and keep the event stream unchanged.
 
 \begin{figure}[H]
 \centering
-\caption {SUSE Security Agent Stream}
+\caption {SUSE Security Event Stream with Agent}
 \includegraphics[width=0.9\linewidth]{images/neuvector-agent-stream.png}
 \label{fig:agent-stream}
 \end{figure}
@@ -164,7 +163,7 @@ The agent has access to the Kubernetes cluster via the MCP server, so we can ins
 
 \indent\colorbox{codegrey}{
     \parbox{0.8\linewidth}{
-If this is a breach and the pod is still active, delete the associated deployment, stateful set, or daemon set without asking for confirmation
+If this is a breach and the pod is still active, delete the associated deployment, stateful set, or daemon set without asking for confirmation.
      }
 }
 
@@ -174,7 +173,7 @@ Similarly, since the agent has access to our ITSM system through its MCP server,
 
 \indent\colorbox{codegrey}{
     \parbox{0.8\linewidth}{
-If this is serious and warrants immediate attention, then create a P1 Security Incident, otherwise create a P3 Normal Incident
+If this is serious and warrants immediate attention, create a P1 Security Incident; otherwise, create a P3 Normal Incident.
      }
 }
 
@@ -206,15 +205,17 @@ Create a cron table entry to run in 28 days that generates a report using the NI
 
 \subsection{Adding the agent to the team}
 
-As we discussed in the previous chapter, having a system assist with alert triage can significantly reduce Alert Fatigue.\footnote{See \textit{IBM (2026)}: What is Alert Fatigue. \cite{alertFatigue}}
+As we discussed in the previous chapter, having a system assist with alert triage can significantly reduce Alert Fatigue and help the team focus on real security events.\footnote{See \textit{IBM (2026)}: What is Alert Fatigue. \cite{alertFatigue}}
 
-With an autonomous agent, we can enable direct communication with the human team members via channels such as Microsoft Teams or Slack. In agent terms, these channels are treated as distinct inputs, and we want to ensure that all channels share a single session for continuity.\footnote{See \textit{Steinberger, P. (2026)}: Session Management. \cite{clawSession}}
+With an autonomous agent, we can go a step further by enabling direct communication with human team members via channels such as Microsoft Teams or Slack. In agent terms, these channels are treated as distinct inputs, and we want to ensure that all channels share a single session for continuity.\footnote{See \textit{Steinberger, P. (2026)}: Session Management. \cite{clawSession}}
 
-The more capabilities we give to the agentic colleague, the more mindful we need to be of the non-deterministic nature of their decision and thought process.
+The more capabilities we give to the agentic colleague, though, the more mindful we need to be of the non-deterministic nature of their decision and thought process.
 
-In our setup, we use the bridge to pass a complete set of prompts and instructions for each security signal, thereby avoiding context loss and achieving consistent results.
+In our setup, we use the bridge to pass a complete set of prompts and instructions for each security signal, thereby avoiding context loss and achieving consistent results. It's a pretty restrictive setup that reduces the agent's reasoning scope to the current signal only. Still, it allows us to convey clear instructions and ensure that the stringent legal requirements of NIS2 compliance (e.g., the reporting sequence) are not open to discussion. 
 
-In recent literature, the context of an agent harness is being discussed to safeguard its actions; this would go beyond the scope of this paper, but should be taken into account once agentic colleagues are added to the team.\footnote{See \textit{Warfield, D. (2026)}: Agent Harnesses. \cite{agentHarness}}
+In the limited time for the experiment, that approach seems to have worked and provided consistent results, but that's anecdotal evidence at best and would require further analysis.
+
+In recent literature, the context of an agent harness is being discussed to safeguard the agent's actions; evaluating this would go beyond the scope of this paper, but the concept of harnesses should be taken into account once agentic colleagues are added to the team.\footnote{See \textit{Warfield, D. (2026)}: Agent Harnesses. \cite{agentHarness}}
 
 \subsection{Adding agentic AI to long-term data storage}
 
@@ -224,12 +225,12 @@ Independent of our bridge, Elastic provides a full commercial SIEM solution in i
 
 \begin{figure}[H]
 \centering
-\caption {SUSE Security Elastic Agent}
+\caption {SUSE Security Event Stream with Elastic}
 \includegraphics[width=0.9\linewidth]{images/neuvector-agent-elastic.png}
 \label{fig:agent-elastic}
 \end{figure}
 
-As with the agent harnesses above, evaluating Elastic's agentic SIEM platform would go beyond the scope of this paper.
+As with the agent harnesses above, evaluating Elastic's agentic SIEM platform would go beyond the scope of this paper and become more of a commercial evaluation.
 
 \subsection{Summary}
 

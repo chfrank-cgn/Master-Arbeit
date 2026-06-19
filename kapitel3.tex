@@ -3,7 +3,7 @@
 %
 
 \pagebreak
-\section{Experiment}
+\section{The Experiment}
 
 \onehalfspacing
 
@@ -160,6 +160,7 @@ In our setup, we will use an Elasticsearch instance for long-term storage of sec
 
 Syslog-ng allows events to be sent directly to Elasticsearch, with no post-processing needed.
 
+\pagebreak
 \begin{lstlisting}[caption=Destination d-elastic, frame=single, basicstyle=\ttfamily\small, breaklines=true]
 destination d_elastic {
     elasticsearch-http(
@@ -176,7 +177,7 @@ The standard interface for Elasticsearch data is Kibana, and without defining an
 
 \begin{figure}[H]
 \centering
-\caption {Discover}
+\caption {Kibana Discover}
 \includegraphics[width=0.9\linewidth]{images/neuvector-kibana.png}
 \label{fig:neuvector-kibana}
 \end{figure}
@@ -187,7 +188,7 @@ In the following chapters, we will explore options, such as comprehensive report
 
 \subsection{MCP Server}\label{mcp-view}
 
-As a companion to our LLM, we can run an MCP Server. A Kubernetes MCP server can significantly enhance security event analysis by providing the LLM with access to all cluster metadata, including information about nodes, pods, and containers. This metadata can be very useful for enriching security log data and making it easier to analyze. However, as we move from text logic to container orchestration, we must ensure that appropriate security safeguards are in place. From Domain-Driver Design, we can borrow Bounded Contexts and the Anti-Corruption Layer.\footnote{See \textit{Traub, D. (2026)}: Rediscovering Domain-Driven Design. \cite{domainDriven}}
+As a companion to our LLM, we will run an MCP Server. A Kubernetes MCP server can significantly enhance security event analysis by providing the LLM with access to all cluster metadata, including information about nodes, pods, and containers. This metadata can be very useful for enriching security log data and making it easier to analyze. However, as we move from text logic to container orchestration, we must ensure that appropriate security safeguards are in place. From Domain-Driver Design, we can borrow Bounded Contexts and the Anti-Corruption Layer.\footnote{See \textit{Traub, D. (2026)}: Rediscovering Domain-Driven Design. \cite{domainDriven}}
 
 \begin{figure}[H]
 \centering
@@ -196,10 +197,11 @@ As a companion to our LLM, we can run an MCP Server. A Kubernetes MCP server can
 \label{fig:mcp-server}
 \end{figure}
 
-In our setup, to aid the LLM in interpreting Neuvector signals, we added an open-source Kubernetes MCP server from the Containers repository restricted to read-only access, using Kubernetes' Role-Based Access Control.\footnote{See \textit{Containers (2026)}: Welcome to Containers. \cite{whichMCP}} RBAC is a security mechanism that regulates access to resources based on the roles assigned to users, groups, or service accounts.\footnote{\textit{Ferraiolo, D. et.al. (2007)}: Role-Based Access Control. \cite{rbac}}
+In our setup, to aid the LLM in interpreting Neuvector signals, we added an open-source Kubernetes MCP server from the Containers repository and bound its context by restricting it to read-only access, using Kubernetes' Role-Based Access Control.\footnote{See \textit{Containers (2026)}: Welcome to Containers. \cite{whichMCP}} RBAC is a security mechanism that regulates access to resources based on the roles assigned to users, groups, or service accounts.\footnote{\textit{Ferraiolo, D. et.al. (2007)}: Role-Based Access Control. \cite{rbac}}
 
 RBAC in Kubernetes allows administrators to define granular permissions by creating Roles and ClusterRoles that specify which actions (e.g., get, create, delete) are allowed on which resources (e.g., pods, deployments, secrets). These roles are then bound to users or service accounts via RoleBindings (namespace-scoped) or ClusterRoleBindings (cluster-wide):
 
+\pagebreak
 \begin{lstlisting}[caption=Cluster View Role Definition, frame=single, basicstyle=\ttfamily\small, breaklines=true]
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -225,7 +227,7 @@ The final setup with all components will then look like this in the management c
 
 \begin{figure}[H]
 \centering
-\caption {Full Deployment}
+\caption {Final Setup}
 \includegraphics[width=0.9\linewidth]{images/neuvector-rancher.png}
 \label{fig:neuvector-rancher}
 \end{figure}
@@ -250,7 +252,7 @@ In production, a detailed inspection of the event-stream data will be necessary 
 
 \subsection{Software Versions}
 
-The following open-source software versions are used for our experiment:
+The following open-source software versions are used in our experiment:
 
 \begin{table}[ht]
   \caption{Software Versions}

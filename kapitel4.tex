@@ -86,7 +86,7 @@ Here is a security event from NeuVector. Please analyze.
 
 The LLM will then respond to our bridge with a detailed analysis of the event in the customary markdown format.
 
-There are many libraries available for Python to read markdown and extract the formatting, such as the Markdown Worker.\footnote{See \textit{Khurana, M. (2025)}: Markdown Worker. \cite{markdownWorker}}
+To ingest the analysis into our bridge, we use one of the many libraries available for Python to read markdown and extract the formatting, such as the Markdown Worker.\footnote{See \textit{Khurana, M. (2025)}: Markdown Worker. \cite{markdownWorker}}
 
 \subsubsection{Critical Event}
 
@@ -356,7 +356,7 @@ Based on this decision, the bridge could be enhanced to use the incident analysi
 
 Events below the cutoff would not create an incident; however, they would still be available in the long-term data storage for forensic analysis and summary reports.
 
-In our examples above, for the first event, it would mean creating an internal incident, as the event had medium priority while the workload was still active. For the second, low-priority event, no event would be created.
+In our examples above, for the first event, it would mean creating an internal incident, as the event had medium priority while the workload was still active. For the second, low-priority event, no incident would be created.
 
 \subsection{Reporting}\label{breach}
 
